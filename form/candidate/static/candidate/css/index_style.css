@@ -1,0 +1,53 @@
+header {
+    width: 1140px;
+    margin: 0 auto;
+    text-align: center;
+    font-size: 25px;
+}
+
+header p{
+    font-size: 20px;
+}
+
+.content {
+    width: 1140px;
+    margin: 0 auto;
+}
+
+.block {
+    border: 2px solid #DD4814;
+    margin-bottom: 20px;
+}
+
+
+.block-header {
+    margin-left: 15px;
+    font-size: 20px;
+}
+
+.content-row {
+    margin-left: 35px;
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+.description {
+    margin-bottom: 10px;
+
+}
+
+.block input[type="text"] {
+    width: 50%;
+    height: 38px;
+    border: 2px solid black;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.block textarea {
+    width: 50%;
+    height: 120px;
+    border: 2px solid black;
+    border-radius: 4px;
+    font-size: 14px;
+}

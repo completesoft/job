@@ -9,16 +9,16 @@ from .forms import PersonForm, ExpirienceForm
 def person(request):
     if request.method == 'POST':
         form = PersonForm(request.POST)
-        #formExp = ExpirienceForm(request.POST)
+        # formExp = ExpirienceForm(request.POST)
         if form.is_valid():
             pers = form.save()
             pers.experience_set.create(responsibility=request.POST['responsibility'])
-            #formExp.save()
+            # formExp.save()
             return HttpResponseRedirect('thanks.html')
     else:
         form = PersonForm()
         formExp = ExpirienceForm()
-    return render(request, 'candidate/index.html', {'form':form, 'formexp': formExp})
+    return render(request, 'candidate/index.html', {'form':form})
 
 def thanks(request):
     return render(request, 'candidate/thanks.html')

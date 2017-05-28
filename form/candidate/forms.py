@@ -5,7 +5,10 @@ from .models import Person, Experience
 class PersonForm(ModelForm):
     class Meta:
         model = Person
-        fields = ['position', 'full_name', 'birthday', 'sex', 'registration', 'residence', 'phone',
+        fields = ['position', 'full_name', 'birthday', 'sex',
+                  'registration',
+                  'residence',
+                  'phone',
                   'children',
                   'passp_number', 'passp_issue', 'passp_date',
                   'army', 'army_id', 'driver_lic', 'car', 'advantage', 'disadvantage', 'convicted', 'illness',
