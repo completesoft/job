@@ -34,7 +34,8 @@ class PersonAdmin(ImportMixin, admin.ModelAdmin):
 
     def export_to_xls (self, request, queryset):
         pers = queryset[0]
-        workbook = xlsxwriter.Workbook(os.path.join("D:/Dev_doc/", pers.full_name,))
+        path = pers.full_name+".xlsx"
+        workbook = xlsxwriter.Workbook(os.path.join("D:/Dev_doc/", path, ))
         worksheet = workbook.add_worksheet(pers.full_name)
 
         self.message_user(request, pers.full_name)

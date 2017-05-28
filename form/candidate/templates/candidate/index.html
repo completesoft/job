@@ -16,7 +16,7 @@
         </p>
     </header>
     <div class="content">
-        <form class="main" action="{% url 'candidate:thanks' %}" method="post">
+        <form class="main" action="{% url 'candidate:index' %}" method="post">
             {% csrf_token %}
             <div class="block">
                 <h3 class="block-header">Личные данные</h3>

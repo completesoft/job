@@ -12,7 +12,7 @@ def person(request):
         # formExp = ExpirienceForm(request.POST)
         if form.is_valid():
             pers = form.save()
-            pers.experience_set.create(responsibility=request.POST['responsibility'])
+            # pers.experience_set.create(responsibility=request.POST['responsibility'])
             # formExp.save()
             return HttpResponseRedirect('thanks.html')
     else:
