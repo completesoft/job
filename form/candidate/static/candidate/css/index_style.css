@@ -21,7 +21,8 @@ header p{
 
 
 .block-header {
-    margin-left: 15px;
+    margin-left: 10px;
+    margin-bottom: 10px;
     font-size: 20px;
 }
 
@@ -33,7 +34,24 @@ header p{
 
 .description {
     margin-bottom: 10px;
+}
 
+.description_2{
+    margin-left: 20px;
+}
+
+.block-referrer{
+    text-align: right;
+}
+
+.col{
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.footer{
+    text-align: left;
 }
 
 .block input[type="text"] {
@@ -50,4 +68,49 @@ header p{
     border: 2px solid black;
     border-radius: 4px;
     font-size: 14px;
+}
+
+.radio_lable {
+    font-size: 15px;
+}
+
+input:focus {
+  background: #F0F8FF;
+}
+
+textarea:focus {
+  background: #F0F8FF;
+}
+
+#error {
+    margin-bottom: 20px;
+    color:red;
+    font-size:15px;
+    position:absolute;
+    width:140px;
+}
+
+.error {
+    background: #DD4814;
+}
+
+#sub_button:hover{
+    color: #ffffff;
+    background-color: #37FF7D;
+    border-color: #37FF7D;
+}
+
+#sub_button{
+    width: 150px;
+    height: 40px;
+    margin-bottom: 0;
+    font-weight: bold;
+    font-size: 18px;
+    font-color: black;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.filler{
+    height: 150px;
 }

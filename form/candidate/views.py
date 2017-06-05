@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from .models import Person, Experience
 from django.core.urlresolvers import reverse
 from django.views.generic.edit import CreateView
-from .forms import PersonForm, ExpirienceForm
+from .forms import PersonForm, ResidenceForm, EducationForm, ExpirienceForm
 
 
 def person(request):
@@ -17,8 +17,9 @@ def person(request):
             return HttpResponseRedirect('thanks.html')
     else:
         form = PersonForm()
+        formEdu = EducationForm()
         formExp = ExpirienceForm()
-    return render(request, 'candidate/index.html', {'form':form})
+    return render(request, 'candidate/index.html', {'form':form, 'formEdu':formEdu, 'formExp': formExp})
 
 def thanks(request):
     return render(request, 'candidate/thanks.html')

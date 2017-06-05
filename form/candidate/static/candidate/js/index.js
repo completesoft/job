@@ -27,26 +27,51 @@
 //    setTimeout(timer, 1000);
 //  }
 //}
+var INDEX_ADD = {
+                countRes : 0,
+                countEdu : 0,
+                countExp : 0
+};
 
 
-
-
-var count=0
 function addResidence(id){
-//    var count=0
-    console.log(count, id)
-    if (id==="residence_yes" && count!=0){
-        var text = document.getElementById("id_residence")
-        text.remove()
-        --count
-    }else if (id==="residence_not" && count===0){
+    console.log(INDEX_ADD.countRes, id);
+    if (id==="residence_yes" && INDEX_ADD.countRes!=0){
+        var text = document.getElementById("id_residence");
+        text.remove();
+        --INDEX_ADD.countRes;
+    }else if (id==="residence_not" && INDEX_ADD.countRes===0){
         var text = document.createElement('textarea');
         text.id = "id_residence";
         text.cols = "40";
-        text.rows = "10"
+        text.rows = "10";
         text.name = "residence";
         residence_js.appendChild(text);
-        ++count;
+        ++INDEX_ADD.countRes;
     }
 }
+
+function date_assemble(id){
+    var birthDay = document.getElementById('birth_day'),
+        birthMonth = document.getElementById('birth_month').value,
+        birthYear = document.getElementById('birth_year').value;
+
+
+    console.log(name);
+//    console.log(birthDay);
+    console.log('Not cleared date: ' ,birthDay.value, birthMonth, birthYear);
+
+    tempDate = new Date(birthYear, birthMonth, birthDay.value);
+    if (birthYear!= tempDate.getFullYear() || birthMonth!= tempDate.getMonth() || birthDay.value!=tempDate.getDate()){
+        console.log('Autocorrection: ' ,birthDay.value, birthMonth, birthYear);
+        birthDay.classList.add("error");
+        error.innerHTML = "Неверная дата!!!";
+        this.focus();
+    } else{
+        birthDay.classList.remove("error");
+        error.innerHTML = "";
+        console.log('Very good');
+    }
+}
+
 

@@ -22,7 +22,7 @@ class PersonAdmin(ImportMixin, admin.ModelAdmin):
 
 
     fieldsets = [
-        ('Личные данные:', {'fields':[('position', 'full_name', 'birthday'), 'sex', 'registration', 'residence']}),
+        ('Личные данные:', {'fields':[('position', 'full_name', 'birthday'), 'gender', 'registration', 'residence']}),
         ('Контакты:',{'fields':['phone']}),
         ('Семья:', {'fields': ['children']}),
         ('Паспортные данные:', {'fields': ['passp_number', 'passp_issue', 'passp_date']}),
@@ -33,7 +33,7 @@ class PersonAdmin(ImportMixin, admin.ModelAdmin):
 
     actions = ['export_to_xls']
 
-    def export_to_xls (self, request, queryset):
+    def export_to_xls(self, request, queryset):
         pers = queryset[0]
         path = pers.full_name+".xlsx"
         workbook = xlsxwriter.Workbook(os.path.join(EXPORT_DIR, path))
