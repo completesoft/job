@@ -1,4 +1,4 @@
-from django.forms import ModelForm
+from django.forms import ModelForm, formset_factory
 from .models import Person, Residence_address, Education, Experience
 
 
@@ -7,7 +7,7 @@ class PersonForm(ModelForm):
         model = Person
         fields = ['position', 'full_name', 'birthday', 'gender',
                   'registration',
-                  'residence',
+                  'residenceBool',
                   'phone',
                   'children',
                   'passp_number', 'passp_issue', 'passp_date',
@@ -19,15 +19,28 @@ class PersonForm(ModelForm):
                   'start'
                   ]
 
+
 class ResidenceForm(ModelForm):
     class Meta:
         model = Residence_address
         fields = ['residence']
 
+    def save(self, person):
+        obj = super(ResidenceForm, self).save(commit=False)
+        obj.person = person
+        return obj.save()
+
+
 class EducationForm(ModelForm):
     class Meta:
         model = Education
         fields = ['start_date', 'end_date', 'name_institute', 'qualification']
+
+    def save(self, person):
+        obj = super(EducationForm, self).save(commit=False)
+        obj.person = person
+        return obj.save()
+
 
 class ExpirienceForm(ModelForm):
     class Meta:
@@ -41,3 +54,9 @@ class ExpirienceForm(ModelForm):
             'exp_salary',
             'reason_leaving'
         ]
+
+
+    def save(self, person):
+        obj = super(ExpirienceForm, self).save(commit=False)
+        obj.person = person
+        return obj.save()

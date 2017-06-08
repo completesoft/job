@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Person, Residence_address, Experience
+from .models import Person, Residence_address, Experience, Education
 from import_export import resources
 from import_export.admin import ExportActionModelAdmin, ImportExportModelAdmin, ImportMixin
 import xlsxwriter
@@ -13,8 +13,21 @@ class PersonResource(resources.ModelResource):
         model = Person
 
 
+class ResidenceInline(admin.TabularInline):
+    model = Residence_address
+    extra = 0
+
+class ExpirienceInline(admin.TabularInline):
+    model = Experience
+    extra = 0
+
+class EducationInline(admin.TabularInline):
+    model = Education
+    extra = 0
 
 class PersonAdmin(ImportMixin, admin.ModelAdmin):
+    inlines = [ResidenceInline, EducationInline, ExpirienceInline]
+
     resource_class = PersonResource
     list_display = ['full_name', 'fill_date', 'position']
     list_filter = ['fill_date', 'position']
@@ -22,13 +35,11 @@ class PersonAdmin(ImportMixin, admin.ModelAdmin):
 
 
     fieldsets = [
-        ('Личные данные:', {'fields':[('position', 'full_name', 'birthday'), 'gender', 'registration', 'residence']}),
+        ('Личные данные:', {'fields':[('position', 'full_name', 'birthday'), 'gender', 'registration', 'residenceBool']}),
         ('Контакты:',{'fields':['phone']}),
         ('Семья:', {'fields': ['children']}),
         ('Паспортные данные:', {'fields': ['passp_number', 'passp_issue', 'passp_date']}),
-        ('Образование и специальность:', {'fields': []}),
         ('Дополнительные сведения:', {'fields': ['army', 'army_id', 'driver_lic', 'car', 'advantage', 'disadvantage', 'convicted', 'illness', 'salary']}),
-        ('Опыт работы:', {'fields': []}),
     ]
 
     actions = ['export_to_xls']
@@ -115,3 +126,4 @@ class PersonAdmin(ImportMixin, admin.ModelAdmin):
 admin.site.register(Person, PersonAdmin)
 admin.site.register(Residence_address)
 admin.site.register(Experience)
+admin.site.register(Education)

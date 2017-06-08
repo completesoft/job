@@ -52,6 +52,7 @@ header p{
 
 .footer{
     text-align: left;
+    padding: 20px;
 }
 
 .block input[type="text"] {
@@ -82,7 +83,7 @@ textarea:focus {
   background: #F0F8FF;
 }
 
-#error {
+#error_birth, #error_passp, #error_start {
     margin-bottom: 20px;
     color:red;
     font-size:15px;
@@ -106,11 +107,14 @@ textarea:focus {
     margin-bottom: 0;
     font-weight: bold;
     font-size: 18px;
-    font-color: black;
     text-align: center;
     vertical-align: middle;
 }
 
 .filler{
     height: 150px;
+}
+
+select{
+    font-size: 25px;
 }

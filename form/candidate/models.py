@@ -12,12 +12,11 @@ class Person(models.Model):
     gender_set = (
         (0, 'Мужской'),
         (1, 'Женский'),
-        (2, 'Не указан')
     )
     gender = models.IntegerField('Пол', choices=gender_set, default=2, blank=True)
 
     registration = models.TextField('Адрес прописки', default='', blank=True)
-    residence = models.BooleanField('Адрес проживания совпадает с адресом прописки', default=True, blank=True)
+    residenceBool = models.BooleanField('Адрес проживания совпадает с адресом прописки', default=True, blank=True)
 
     phone = models.CharField('Мобильный телефон',max_length=15, default='', blank=True)
 
@@ -40,13 +39,13 @@ class Person(models.Model):
 
     # Section: Other
         # referrer first
-    ref1_full_name = models.CharField('Фамилия, имя, отчество',max_length=100)
-    ref1_position = models.CharField('Должность',max_length=50, blank=True)
+    ref1_full_name = models.CharField('Фамилия, имя, отчество',max_length=100, default='', blank=True)
+    ref1_position = models.CharField('Должность',max_length=50, default='', blank=True)
     ref1_workplace = models.CharField('Место работы', max_length=100, default='', blank=True)
     ref1_phone = models.CharField('Мобильный телефон',max_length=15, default='', blank=True)
         # referrer second
-    ref2_full_name = models.CharField('Фамилия, имя, отчество', max_length=100)
-    ref2_position = models.CharField('Должность', max_length=50, blank=True)
+    ref2_full_name = models.CharField('Фамилия, имя, отчество', max_length=100, default='', blank=True)
+    ref2_position = models.CharField('Должность', max_length=50, default='', blank=True)
     ref2_workplace = models.CharField('Место работы', max_length=100, default='', blank=True)
     ref2_phone = models.CharField('Мобильный телефон', max_length=15, default='', blank=True)
 
@@ -60,7 +59,7 @@ class Person(models.Model):
         verbose_name_plural = 'Соискатели'
 
     def __str__(self):
-        return '{} {}'.format(self.full_name, self.position)
+        return '{} : {}'.format(self.full_name, self.position)
 
 
 
@@ -73,6 +72,8 @@ class Residence_address(models.Model):
         verbose_name = 'Адрес проживания'
         verbose_name_plural = 'Адрес проживания'
 
+    def __str__(self):
+        return '{} {}'.format('адрес', self.person.full_name)
 
 class Education(models.Model):
 
@@ -97,14 +98,10 @@ class Experience(models.Model):
     exp_end_date = models.DateField('Период работы по', null=True, blank=True)
     workplace = models.CharField('Место работы', max_length=100, default='', blank=True)
     exp_position = models.CharField('Должность', max_length=100, default='', blank=True)
-    responsibility = models.TextField('Обязанности', default='', blank=True)
+    responsibility = models.TextField('Обязанности', max_length=100,default='', blank=True)
     exp_salary = models.IntegerField('Зарплата', default=0, blank=True)
-    reason_leaving = models.TextField('Причина увольнения', default='', blank=True)
+    reason_leaving = models.TextField('Причина увольнения',max_length=100, default='', blank=True)
 
     class Meta():
         verbose_name = 'Опыт работы'
         verbose_name_plural = 'Опыт работы'
-
-
-
-
