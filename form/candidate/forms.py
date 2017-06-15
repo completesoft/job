@@ -55,7 +55,6 @@ class ExpirienceForm(ModelForm):
             'reason_leaving'
         ]
 
-
     def save(self, person):
         obj = super(ExpirienceForm, self).save(commit=False)
         obj.person = person

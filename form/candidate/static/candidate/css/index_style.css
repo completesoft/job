@@ -111,10 +111,23 @@ textarea:focus {
     vertical-align: middle;
 }
 
+#edu_add, #exp_add{
+    width: 130px;
+    height: 40px;
+    font-size: 18px;
+}
+
+
 .filler{
     height: 150px;
 }
 
 select{
-    font-size: 25px;
+    font-size: 20px;
+}
+
+.radio_lable, input[type="radio"]{
+    width: 25px;
+    height: 25px;
+    font-size: 20px;
 }

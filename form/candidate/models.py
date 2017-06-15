@@ -10,10 +10,10 @@ class Person(models.Model):
     birthday = models.DateField('Дата рождения', null=True, blank=True)
 
     gender_set = (
-        (0, 'Мужской'),
-        (1, 'Женский'),
+        ('0', 'Мужской'),
+        ('1', 'Женский'),
     )
-    gender = models.IntegerField('Пол', choices=gender_set, default=2, blank=True)
+    gender = models.CharField('Пол', max_length=1, choices=gender_set, default=2, blank=True)
 
     registration = models.TextField('Адрес прописки', default='', blank=True)
     residenceBool = models.BooleanField('Адрес проживания совпадает с адресом прописки', default=True, blank=True)
@@ -88,6 +88,8 @@ class Education(models.Model):
         verbose_name = 'Образование и специальность'
         verbose_name_plural = 'Образование и специальность'
 
+    def __str__(self):
+        return '{} {}'.format('Образование', self.person.full_name)
 
 
 class Experience(models.Model):
@@ -105,3 +107,6 @@ class Experience(models.Model):
     class Meta():
         verbose_name = 'Опыт работы'
         verbose_name_plural = 'Опыт работы'
+
+    def __str__(self):
+        return '{} {}'.format('Опыт работы', self.person.full_name)

@@ -29,9 +29,21 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# E-mail config
+    #for testingw
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = 2000
+    #for real email server
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# DEFAULT_FROM_EMAIL = 'user@domain.com'
+# EMAIL_USE_TLS = True
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_HOST_USER = 'user@domain.com'
+# EMAIL_HOST_PASSWORD = 'password'
+# EMAIL_PORT = 587
+
 
 # Application definition
-
 INSTALLED_APPS = [
     'candidate.apps.CandidateConfig',
     'django.contrib.admin',
