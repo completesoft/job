@@ -175,7 +175,6 @@ class PersonAdmin(ImportMixin, admin.ModelAdmin):
         row += 2
         ws.merge_range(row, col, row, col + 4, 'Образование', simple_senter_h)
         row += 1
-        print(len(edu), edu[0].name_institute)
         if len(edu)!= 0:
             for e in edu:
                 if not e:
