@@ -57,7 +57,7 @@ function addEdu(id){
         var divParent = document.getElementById("app_edu");
         var sourceNode = document.getElementById("edu_div");
         var divChild = sourceNode.cloneNode(true);
-        ++INDEX_ADD.countEdu;
+        INDEX_ADD.countEdu+=1;
         var elements = divChild.querySelectorAll('input, textarea, select');
         for (var i = 0; i < elements.length; i++) {
             var input = elements[i];
@@ -77,13 +77,13 @@ function addExp(id){
         var divParent = document.getElementById("app_exp");
         var sourceNode = document.getElementById("exp_div");
         var divChild = sourceNode.cloneNode(true);
-        ++INDEX_ADD.countExp;
+        INDEX_ADD.countExp+=1;
+//        console.log(INDEX_ADD.countExp);
         var elements = divChild.querySelectorAll('input, textarea, select');
         for (var i = 0; i < elements.length; i++) {
             var input = elements[i];
-            console.log(input.name);
-            input.name+=INDEX_ADD.countEdu;
-            input.id+=INDEX_ADD.countEdu;
+            input.name+=INDEX_ADD.countExp;
+            input.id+=INDEX_ADD.countExp;
             if (input.tagName == 'SELECT'){continue;}
             input.value = '';
         }
