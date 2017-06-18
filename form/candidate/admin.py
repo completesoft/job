@@ -62,6 +62,7 @@ class PersonAdmin(ImportMixin, admin.ModelAdmin):
         date_format = workbook.add_format({'num_format': 'dd/mm/yyyy', 'bold': True, 'align': 'center', 'valign': 'vcenter', 'border': 1})
         date_format_1 = workbook.add_format({'num_format': 'dd/mm/yyyy', 'bold': True, 'align': 'left', 'valign': 'vcenter'})
         center_bold = workbook.add_format({'bold': 'True', 'align': 'center', 'valign': 'vcenter', 'border': 1})
+        center_bold_wrap = workbook.add_format({'bold': 'True', 'align': 'center', 'valign': 'vcenter', 'border': 1, 'text_wrap': True})
         simple_senter_h = workbook.add_format({'bold': True, 'align': 'center', 'valign': 'vcenter', 'border': 2, 'font_size': 12})
         simple_senter = workbook.add_format({'align': 'center', 'valign': 'vcenter', 'border': 1})
         bold_left = workbook.add_format({'bold': True, 'valign': 'vcenter'})
@@ -92,8 +93,8 @@ class PersonAdmin(ImportMixin, admin.ModelAdmin):
         ws.merge_range('B7:C7', 'Адрес прописки', simple_senter)
         ws.merge_range('D7:E7', 'Адрес проживания', simple_senter)
         ws.merge_range('A8:A10', pers.birthday, date_format)
-        ws.merge_range('B8:C10', pers.registration, center_bold)
-        ws.merge_range('D8:E10', res.residence, center_bold)
+        ws.merge_range('B8:C10', pers.registration, center_bold_wrap)
+        ws.merge_range('D8:E10', res.residence, center_bold_wrap)
 
         ws.write('A12', 'Номер телефона', simple_senter)
         ws.merge_range('B12:C12', 'Семейное положение', simple_senter)
