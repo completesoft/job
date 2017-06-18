@@ -21,19 +21,16 @@ class Person(models.Model):
     phone = models.CharField('Мобильный телефон',max_length=15, default='', blank=True)
 
     civil_status_set = (
-        ('Не женат', 'Не женат'),
-        ('Не замужем', 'Не замужем'),
-        ('Женат', 'Женат'),
-        ('Замужем', 'Замужем'),
-        ('Розведен(а)', 'Розведен(а)'),
+        ('Женат/Замужем', 'Женат/Замужем'),
+        ('Не женат/Не замужем', 'Не женат/Не замужем'),
     )
-    civil_status = models.CharField('Семейное положение', max_length=10, choices=civil_status_set, default='', blank=True)
+    civil_status = models.CharField('Семейное положение', max_length=20, choices=civil_status_set, default='', blank=True)
     children = models.BooleanField('Дети', default=False)
 
     quant_children_set = (
-        (1, 1), (2, 2), (3, 3), (4, 4), (5, 5), (6, 6), (7, 7),
+        (0,0), (1, 1), (2, 2), (3, 3), (4, 4), (5, 5), (6, 6), (7, 7),
     )
-    quant_children = models.IntegerField('Количество детей', choices=quant_children_set, default=0, blank=True)
+    quant_children = models.IntegerField('Количество детей', choices=quant_children_set, default='0')
 
     passp_number = models.CharField('Серия, номер паспорта',max_length=20, default='', blank=True)
     passp_issue = models.CharField('Кем выдан',max_length=50, default='', blank=True)

@@ -35,7 +35,7 @@ function add_quant_children(id){
     }
     if (id=='children_not'){
         div.hidden = true;
-        hid_child.value = "";
+        hid_child.value = '0';
     }
     console.log(hid_child.value)
 }
@@ -61,10 +61,10 @@ function addEdu(id){
         var elements = divChild.querySelectorAll('input, textarea, select');
         for (var i = 0; i < elements.length; i++) {
             var input = elements[i];
-            console.log(input.name);
+//            console.log(input.tagName);
             input.name+=INDEX_ADD.countEdu;
             input.id+=INDEX_ADD.countEdu;
-            if (input.tag == 'select'){continue;}
+            if (input.tagName == 'SELECT'){continue;}
             input.value = '';
         }
         sourceNode.parentNode.insertBefore(divChild, document.getElementById('edu_js'));
@@ -84,7 +84,7 @@ function addExp(id){
             console.log(input.name);
             input.name+=INDEX_ADD.countEdu;
             input.id+=INDEX_ADD.countEdu;
-            if (input.tag == 'select'){continue;}
+            if (input.tagName == 'SELECT'){continue;}
             input.value = '';
         }
         sourceNode.parentNode.insertBefore(divChild, document.getElementById('exp_js'));
@@ -170,7 +170,8 @@ function populatedYear(){
     option_edu_end_year.insertAdjacentHTML('beforeEnd', inHTML);
     option_exp_start_year.insertAdjacentHTML('beforeEnd', inHTML);
     option_exp_end_year.insertAdjacentHTML('beforeEnd', inHTML);
-    option_start_year.insertAdjacentHTML('beforeEnd', inHTML);
+    var inHTML_s = "<option value='"+max+"' disabled selected>Год</option>"+"<option value='"+max+"'>"+max+"</option>"+"<option value='"+(max+1)+"'>"+(max+1)+"</option>";
+    option_start_year.insertAdjacentHTML('beforeEnd', inHTML_s);
 }
 
 

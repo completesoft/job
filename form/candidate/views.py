@@ -61,7 +61,7 @@ def person(request):
                     formEdu.save(pers)
                 cEdu += 1
             mail_file = export_to_xls(pers)
-            emailSenderTwo(mail_file)
+            # emailSenderTwo(mail_file)
             return HttpResponseRedirect('thanks.html')
     else:
         form = PersonForm()
