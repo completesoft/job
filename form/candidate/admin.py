@@ -38,7 +38,7 @@ class PersonAdmin(ImportMixin, admin.ModelAdmin):
     fieldsets = [
         ('Личные данные:', {'fields':['start',('position', 'full_name', 'birthday'), 'gender', 'registration', 'residenceBool']}),
         ('Контакты:',{'fields':['phone']}),
-        ('Семья:', {'fields': ['children']}),
+        ('Семья:', {'fields': [('civil_status','children', 'quant_children')]}),
         ('Паспортные данные:', {'fields': ['passp_number', 'passp_issue', 'passp_date']}),
         ('Рекомендатель №1:', {'fields': [('ref1_full_name', 'ref1_position', 'ref1_workplace', 'ref1_phone')]}),
         ('Рекомендатель №2:', {'fields': [('ref2_full_name', 'ref2_position', 'ref2_workplace', 'ref2_phone')]}),
@@ -60,7 +60,7 @@ class PersonAdmin(ImportMixin, admin.ModelAdmin):
         ws.set_paper(9)
         ws.set_footer('&C &P из &N стр.')
         date_format = workbook.add_format({'num_format': 'dd/mm/yyyy', 'bold': True, 'align': 'center', 'valign': 'vcenter', 'border': 1})
-        date_format_1 = workbook.add_format({'num_format': 'dd/mm/yyyy', 'bold': True, 'align': 'center', 'valign': 'vcenter'})
+        date_format_1 = workbook.add_format({'num_format': 'dd/mm/yyyy', 'bold': True, 'align': 'left', 'valign': 'vcenter'})
         center_bold = workbook.add_format({'bold': 'True', 'align': 'center', 'valign': 'vcenter', 'border': 1})
         simple_senter_h = workbook.add_format({'bold': True, 'align': 'center', 'valign': 'vcenter', 'border': 2, 'font_size': 12})
         simple_senter = workbook.add_format({'align': 'center', 'valign': 'vcenter', 'border': 1})
@@ -75,7 +75,8 @@ class PersonAdmin(ImportMixin, admin.ModelAdmin):
         simple_senter_wrap = workbook.add_format({'align': 'center', 'valign': 'vcenter', 'border': 1, 'text_wrap': True})
 
 
-        ws.set_column('A:A', 15.5)
+
+        ws.set_column('A:A', 20)
         ws.set_column('B:B', 12.3)
         ws.set_column('C:C', 12)
         ws.set_column('D:D', 16)
@@ -98,14 +99,14 @@ class PersonAdmin(ImportMixin, admin.ModelAdmin):
         ws.merge_range('B12:C12', 'Семейное положение', simple_senter)
         ws.merge_range('D12:E12', 'Кол-во детей', simple_senter)
         ws.write('A13', pers.phone, simple_senter)
-        ws.merge_range('B13:C13', '', simple_senter)
-        ws.merge_range('D13:E13', pers.children, simple_senter)
+        ws.merge_range('B13:C13', pers.civil_status, simple_senter)
+        ws.merge_range('D13:E13', pers.quant_children, simple_senter)
 
 
         ws.write('A15', 'Служба в армии', simple_senter)
-        ws.write('B15', 'Военный билет', simple_senter)
+        ws.write('B15', 'Воен. билет', simple_senter)
         ws.write('C15', 'Автомобиль', simple_senter)
-        ws.write('D15', 'Водительское удост', simple_senter)
+        ws.write('D15', 'Водит. удост', simple_senter)
         ws.write('E15', 'Угол ответств', simple_senter)
         ws.write('A16', translateBool(pers.army), simple_senter)
         ws.write('B16', translateBool(pers.army_id), simple_senter)
@@ -116,7 +117,7 @@ class PersonAdmin(ImportMixin, admin.ModelAdmin):
         tmpString = str(pers.passp_number + pers.passp_issue) + date.strftime(pers.passp_date, '%d.%m.%Y') if pers.passp_date else ""
         ws.merge_range('A19:E19', tmpString, simple_senter)
 
-        ws.write('A21', 'Хрон заболевания', simple_senter)
+        ws.write('A21', 'Хрон. заболеван.', simple_senter)
         ws.write('A22', translateBool(pers.illness), simple_senter)
 
         ws.merge_range('B21:C21', 'Зарплата', simple_senter)
@@ -128,6 +129,7 @@ class PersonAdmin(ImportMixin, admin.ModelAdmin):
         ws.merge_range('A26:B27', pers.advantage, simple_senter_wrap)
         ws.merge_range('C25:D25', 'Слабые стороны', simple_senter)
         ws.merge_range('C26:D27', pers.disadvantage, simple_senter_wrap)
+        ws.set_row(26, 20)
 
         ws.merge_range('A29:C29', 'Рекомендатели', simple_senter)
         ws.merge_range('D29:E29', 'Доп сведения', simple_senter)
@@ -146,51 +148,57 @@ class PersonAdmin(ImportMixin, admin.ModelAdmin):
         ws.write('A39', 'Начало работы', simple_senter)
         ws.write('A40', pers.start, date_format)
 
-        ws.merge_range('A43:E43', 'Опыт работы', simple_senter_h)
+        breaker_1 = 42
+
+        ws.merge_range('A43:E43', 'Образование', simple_senter_h)
         row = 43
         col = 0
-        if len(exp)!=0:
-            for e in exp:
-                if not e:
-                    ws.write(row, col, "Нет опыта работы", bold_left)
-                    row+=1
-                else:
-                    ws.write(row, col, 'Период работы с:', bold_left)
-                    ws.write(row, col+1, e.exp_start_date, date_format_1)
-                    ws.write(row+1, col, 'Период работы до:', bold_left)
-                    ws.write(row+1, col+1, e.exp_end_date, date_format_1)
-                    ws.write(row+2, col, 'Место работы:', bold_left)
-                    ws.write(row+2, col + 1, e.workplace, bold_left)
-                    ws.write(row+3, col, 'Должность:', bold_left)
-                    ws.write(row+3, col + 1, e.exp_position, bold_left)
-                    ws.write(row+4, col, 'Заработная плата:', bold_left)
-                    ws.write(row+4, col + 1, e.exp_salary, bold_left)
-                    ws.write(row+5, col, 'Обязанности:', bold_left)
-                    ws.merge_range(row + 6, col, row+7, col+4, e.responsibility, simple_senter_wrap)
-                    ws.write(row+8, col, 'Причина увольнения:', bold_left)
-                    ws.merge_range(row+9, col, row+10, col+4, e.reason_leaving, simple_senter_wrap)
-                    # Set first empty row after inserted data
-                    row+=11
-
-        row += 2
-        ws.merge_range(row, col, row, col + 4, 'Образование', simple_senter_h)
-        row += 1
-        if len(edu)!= 0:
+        if len(edu) != 0:
             for e in edu:
                 if not e:
                     ws.write(row, col, "Нет нет учебных заведений", bold_left)
-                    row+=1
+                    row += 1
                 else:
                     ws.write(row, col, 'Начало обучения:', bold_left)
                     ws.write(row, col + 1, e.start_date, date_format_1)
                     ws.write(row + 1, col, 'Окончание обучения:', bold_left)
-                    ws.write(row + 1, col + 2, e.end_date, date_format_1)
+                    ws.write(row + 1, col + 1, e.end_date, date_format_1)
                     ws.write(row + 2, col, 'Название учебного заведения, факультет, форма обучения:', bold_left)
                     ws.merge_range(row + 3, col, row + 4, col + 4, e.name_institute, simple_senter_wrap)
-                    ws.write(row+5, col, 'Специальность:', bold_left)
+                    ws.write(row + 5, col, 'Специальность:', bold_left)
                     ws.merge_range(row + 6, col, row + 7, col + 4, e.qualification, simple_senter_wrap)
                     # Set first empty row after inserted data
-                    row+=8
+                    row += 10
+
+        row += 2
+        breaker_2 = row
+        ws.merge_range(row, col, row, col + 4, 'Опыт работы', simple_senter_h)
+        row += 1
+
+        if len(exp) != 0:
+            for e in exp:
+                if not e:
+                    ws.write(row, col, "Нет опыта работы", bold_left)
+                    row += 1
+                else:
+                    ws.write(row, col, 'Период работы с:', bold_left)
+                    ws.write(row, col + 1, e.exp_start_date, date_format_1)
+                    ws.write(row + 1, col, 'Период работы до:', bold_left)
+                    ws.write(row + 1, col + 1, e.exp_end_date, date_format_1)
+                    ws.write(row + 2, col, 'Место работы:', bold_left)
+                    ws.write(row + 2, col + 1, e.workplace, bold_left)
+                    ws.write(row + 3, col, 'Должность:', bold_left)
+                    ws.write(row + 3, col + 1, e.exp_position, bold_left)
+                    ws.write(row + 4, col, 'Заработная плата:', bold_left)
+                    ws.write(row + 4, col + 1, e.exp_salary, bold_left)
+                    ws.write(row + 5, col, 'Обязанности:', bold_left)
+                    ws.merge_range(row + 6, col, row + 7, col + 4, e.responsibility, simple_senter_wrap)
+                    ws.write(row + 8, col, 'Причина увольнения:', bold_left)
+                    ws.merge_range(row + 9, col, row + 10, col + 4, e.reason_leaving, simple_senter_wrap)
+                    # Set first empty row after inserted data
+                    row += 11
+
+        ws.set_h_pagebreaks([breaker_1, breaker_2])
         workbook.close()
 
         mess = 'Анкета \"{}\" экспортирована в папку: \"{}\"'.format(pers.full_name, EXPORT_DIR)

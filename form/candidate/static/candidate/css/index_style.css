@@ -131,3 +131,9 @@ select{
     height: 25px;
     font-size: 20px;
 }
+
+
+.salary input[type="text"]{
+    width: 80px;
+    text-align: right;
+}

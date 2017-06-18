@@ -13,14 +13,27 @@ class Person(models.Model):
         ('0', 'Мужской'),
         ('1', 'Женский'),
     )
-    gender = models.CharField('Пол', max_length=1, choices=gender_set, default=2, blank=True)
+    gender = models.CharField('Пол', max_length=1, choices=gender_set, default='', blank=True)
 
     registration = models.TextField('Адрес прописки', default='', blank=True)
     residenceBool = models.BooleanField('Адрес проживания совпадает с адресом прописки', default=True, blank=True)
 
     phone = models.CharField('Мобильный телефон',max_length=15, default='', blank=True)
 
+    civil_status_set = (
+        ('Не женат', 'Не женат'),
+        ('Не замужем', 'Не замужем'),
+        ('Женат', 'Женат'),
+        ('Замужем', 'Замужем'),
+        ('Розведен(а)', 'Розведен(а)'),
+    )
+    civil_status = models.CharField('Семейное положение', max_length=10, choices=civil_status_set, default='', blank=True)
     children = models.BooleanField('Дети', default=False)
+
+    quant_children_set = (
+        (1, 1), (2, 2), (3, 3), (4, 4), (5, 5), (6, 6), (7, 7),
+    )
+    quant_children = models.IntegerField('Количество детей', choices=quant_children_set, default=0, blank=True)
 
     passp_number = models.CharField('Серия, номер паспорта',max_length=20, default='', blank=True)
     passp_issue = models.CharField('Кем выдан',max_length=50, default='', blank=True)
@@ -35,7 +48,7 @@ class Person(models.Model):
     disadvantage = models.TextField('Ваши слабые стороны', default='', blank=True)
     convicted = models.BooleanField('Привлекались ли Вы к ответственности (административной, уголовной и т.д.)', default=False, blank=True)
     illness = models.BooleanField('Страдаете ли Вы хроническими заболеваниями?', default=False, blank=True)
-    salary = models.IntegerField('Какую заработную плату Вы хотите получать?', default=0, blank=True)
+    salary = models.CharField('Какую заработную плату Вы хотите получать?', max_length=10, default="", blank=True)
 
     # Section: Other
         # referrer first
@@ -101,7 +114,7 @@ class Experience(models.Model):
     workplace = models.CharField('Место работы', max_length=100, default='', blank=True)
     exp_position = models.CharField('Должность', max_length=100, default='', blank=True)
     responsibility = models.TextField('Обязанности', max_length=100,default='', blank=True)
-    exp_salary = models.IntegerField('Зарплата', default=0, blank=True)
+    exp_salary = models.CharField('Зарплата', max_length=10, default="", blank=True)
     reason_leaving = models.TextField('Причина увольнения',max_length=100, default='', blank=True)
 
     class Meta():

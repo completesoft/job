@@ -27,6 +27,20 @@ function addResidence(id){
     console.log(res.checked);
 }
 
+function add_quant_children(id){
+    var div = document.getElementById('div_quant_children');
+    var hid_child = document.getElementById('id_quant_children');
+    if (id=='children_yes'){
+        div.hidden = false;
+    }
+    if (id=='children_not'){
+        div.hidden = true;
+        hid_child.value = "";
+    }
+    console.log(hid_child.value)
+}
+
+
 function dateEduExp(id){
     rootEl = document.getElementById(id);
     elemEdu = rootEl.parentNode.querySelectorAll('select');
@@ -132,10 +146,17 @@ function populatedYear(){
     var date = new Date (Date.now())
     var min = 1930,
         max = date.getFullYear(),
-        inHTML = "<option value='"+min+"'>Год</option>";
+        inHTML = "<option value='"+min+"' disabled selected>Год</option>";
 
-    option = document.getElementById('birth_year');
-    console.log(option);
+    option_birth = document.getElementById('birth_year');
+    option_passp = document.getElementById('passp_year');
+    option_edu_start_year = document.getElementById('edu_start_year');
+    option_edu_end_year = document.getElementById('edu_end_year');
+    option_exp_start_year = document.getElementById('exp_start_year');
+    option_exp_end_year = document.getElementById('exp_end_year');
+    option_start_year = document.getElementById('start_year');
+
+
     for (var i = min; i<=max; i++){
             inHTML+="<option value='";
             inHTML+=i;
@@ -143,12 +164,38 @@ function populatedYear(){
             inHTML+=i;
             inHTML+="</option>";
     }
-    option.insertAdjacentHTML('beforeEnd', inHTML);
-
-    console.log(max);
-    console.log(inHTML);
+    option_birth.insertAdjacentHTML('beforeEnd', inHTML);
+    option_passp.insertAdjacentHTML('beforeEnd', inHTML);
+    option_edu_start_year.insertAdjacentHTML('beforeEnd', inHTML);
+    option_edu_end_year.insertAdjacentHTML('beforeEnd', inHTML);
+    option_exp_start_year.insertAdjacentHTML('beforeEnd', inHTML);
+    option_exp_end_year.insertAdjacentHTML('beforeEnd', inHTML);
+    option_start_year.insertAdjacentHTML('beforeEnd', inHTML);
 }
 
 
+document.addEventListener("DOMContentLoaded", ready);
+function ready(){
+    populatedYear();
+   var fMain = document.getElementById('mainForm');
+    fMain.addEventListener('keydown', function(event) {
+            if(event.keyCode == 13) {
+                event.preventDefault();
+            }
+    });
+    var salary_main = document.getElementById('id_salary');
+    var salary_exp = document.getElementById('id_exp_salary');
+    salary_main.setAttribute("oninput", "valid_salary(this.id)");
+    salary_exp.setAttribute("oninput", "valid_salary(this.id)");
 
+}
 
+function valid_salary(id){
+    var input = document.getElementById(id);
+    var value = input.value;
+    var re = /[^0-9]/gi;
+    if (re.test(value)){
+        value = value.replace(re, '');
+        input.value = value;
+    }
+}

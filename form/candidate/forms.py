@@ -9,7 +9,7 @@ class PersonForm(ModelForm):
                   'registration',
                   'residenceBool',
                   'phone',
-                  'children',
+                  'civil_status', 'children', 'quant_children',
                   'passp_number', 'passp_issue', 'passp_date',
                   'army', 'army_id', 'driver_lic', 'car', 'advantage', 'disadvantage', 'convicted', 'illness',
                   'salary',
