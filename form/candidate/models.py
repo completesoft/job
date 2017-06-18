@@ -33,7 +33,7 @@ class Person(models.Model):
     quant_children = models.IntegerField('Количество детей', choices=quant_children_set, default='0')
 
     passp_number = models.CharField('Серия, номер паспорта',max_length=20, default='', blank=True)
-    passp_issue = models.CharField('Кем выдан',max_length=50, default='', blank=True)
+    passp_issue = models.CharField('Кем выдан',max_length=70, default='', blank=True)
     passp_date = models.DateField('Дата выдачи', null=True, blank=True)
 
     army = models.BooleanField('Служба в армии', default=False)

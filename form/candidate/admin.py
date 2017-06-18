@@ -115,7 +115,7 @@ class PersonAdmin(ImportMixin, admin.ModelAdmin):
         ws.write('D16', translateBool(pers.driver_lic), simple_senter)
         ws.write('E16', translateBool(pers.convicted), simple_senter)
         ws.merge_range('A18:E18', 'Паспортные данные', simple_senter)
-        tmpString = str(pers.passp_number + pers.passp_issue) + date.strftime(pers.passp_date, '%d.%m.%Y') if pers.passp_date else ""
+        tmpString = str(pers.passp_number +" "+ pers.passp_issue)+" " + date.strftime(pers.passp_date, '%d.%m.%Y') if pers.passp_date else ""
         ws.merge_range('A19:E19', tmpString, simple_senter)
 
         ws.write('A21', 'Хрон. заболеван.', simple_senter)
@@ -197,7 +197,7 @@ class PersonAdmin(ImportMixin, admin.ModelAdmin):
                     ws.write(row + 8, col, 'Причина увольнения:', bold_left)
                     ws.merge_range(row + 9, col, row + 10, col + 4, e.reason_leaving, simple_senter_wrap)
                     # Set first empty row after inserted data
-                    row += 11
+                    row += 13
 
         ws.set_h_pagebreaks([breaker_1, breaker_2])
         workbook.close()

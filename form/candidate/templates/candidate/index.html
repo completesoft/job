@@ -379,7 +379,7 @@
                         <lable class="description" for="id_registration">Дата окончания:</lable>
                         <br>
                             <select id="edu_end_day" name="edu_end_day" hidden>
-                                    <option value="1">День</option>
+                                    <option value="1" selected>День</option>
                             </select>
                             <!-- end of day -->
 
@@ -525,12 +525,12 @@
                         <lable class="description">Период работы с:</lable>
                         <br>
                             <select id="exp_start_day" name="exp_start_day" hidden>
-                                    <option value="1">День</option>
+                                    <option value="1" selected>День</option>
                             </select>
                             <!-- end of day -->
 
                             <!-- month -->
-                            <select id="exp_start_month" name="exp_start_month" onchange="dateEdu(this.id)">
+                            <select id="exp_start_month" name="exp_start_month" onchange="dateEduExp(this.id)">
                                 <option value="0" disabled selected>Месяц</option>
                                     <option value="0" >
                                 Январь            </option>
@@ -561,7 +561,7 @@
                             <span> . </span>
 
                             <!-- year -->
-                            <select id="exp_start_year" name="exp_start_year" onchange="dateEdu(this.id)">
+                            <select id="exp_start_year" name="exp_start_year" onchange="dateEduExp(this.id)">
                             </select>
                         <!-- end of year -->
                         <input type="text" id="id_exp_start_date" name="exp_start_date" value="" hidden>
@@ -571,12 +571,12 @@
                         <lable class="description">Период работы по:</lable>
                         <br>
                             <select id="exp_end_day" name="exp_end_day" hidden>
-                                    <option value="1">День</option>
+                                    <option value="1" selected>День</option>
                             </select>
                             <!-- end of day -->
 
                             <!-- month -->
-                            <select id="exp_end_month" name="exp_end_month" onchange="dateEdu(this.id)">
+                            <select id="exp_end_month" name="exp_end_month" onchange="dateEduExp(this.id)">
                                 <option value="0" disabled selected>Месяц</option>
                                     <option value="0" >
                                 Январь            </option>
@@ -607,7 +607,7 @@
                             <span> . </span>
 
                             <!-- year -->
-                            <select id="exp_end_year" name="exp_end_year" onchange="dateEdu(this.id)">
+                            <select id="exp_end_year" name="exp_end_year" onchange="dateEduExp(this.id)">
                             </select>
                         <!-- end of year -->
                         <input type="text" id="id_exp_end_date" name="exp_end_date" value="" hidden>
