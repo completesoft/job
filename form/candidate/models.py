@@ -25,15 +25,15 @@ class Person(models.Model):
         ('Не женат/Не замужем', 'Не женат/Не замужем'),
     )
     civil_status = models.CharField('Семейное положение', max_length=20, choices=civil_status_set, default='', blank=True)
-    children = models.BooleanField('Дети', default=False)
+    # children = models.BooleanField('Дети', default=False)
 
     quant_children_set = (
-        (0,0), (1, 1), (2, 2), (3, 3), (4, 4), (5, 5), (6, 6), (7, 7),
+        (0, 0), (1, 1), (2, 2), (3, 3), (4, 4), (5, 5), (6, 6), (7, 7),
     )
     quant_children = models.IntegerField('Количество детей', choices=quant_children_set, default='0')
 
     passp_number = models.CharField('Серия, номер паспорта',max_length=20, default='', blank=True)
-    passp_issue = models.CharField('Кем выдан',max_length=70, default='', blank=True)
+    passp_issue = models.CharField('Кем выдан',max_length=255, default='', blank=True)
     passp_date = models.DateField('Дата выдачи', null=True, blank=True)
 
     army = models.BooleanField('Служба в армии', default=False)
@@ -60,9 +60,9 @@ class Person(models.Model):
     ref2_phone = models.CharField('Мобильный телефон', max_length=15, default='', blank=True)
 
     source_about_as = models.CharField('Из какого источника узнали о вакансии',max_length=50, default='', blank=True)
-    add_details = models.TextField('Дополнительне данные', default='', blank=True)
+    add_details = models.TextField('Дополнительные сведения, которые Вы желаете сообщить о себе', default='', blank=True)
 
-    start = models.DateField('Могу начать работать', null=True, blank=True)
+    start = models.DateField('Когда Вы можете начать работать', null=True, blank=True)
 
     class Meta():
         verbose_name = 'Соискатель'

@@ -12,55 +12,59 @@ from datetime import date
 
 def person(request):
     if request.method == 'POST':
+        print(request.POST.getlist("qualification"))
         form = PersonForm(request.POST)
         formRes = ResidenceForm(request.POST)
         formEdu = EducationForm()
         formExp = ExpirienceForm()
         if form.is_valid():
             pers = form.save()
-            if formRes.is_valid() and formRes.cleaned_data['residence']!='':
-                formRes.save(pers)
-            cExp = 0
-            dataExp = {}.fromkeys(ExpirienceForm.Meta.fields)
-            while cExp <= int(request.POST['countExp']):
-                if cExp==0:
-                    formExp = ExpirienceForm(request.POST)
-                    formExp.is_valid()
-                    if not [v for v in formExp.cleaned_data.values() if v]:
-                        cExp += 1
-                        continue
-                    formExp.save(pers)
-                else:
-                    for k in dataExp.keys():
-                        dataExp[k] = request.POST[k+str(cExp)]
-                    if not [v for v in dataExp.values() if v]:
-                        cExp += 1
-                        continue
-                    formExp = ExpirienceForm(dataExp)
-                    formExp.is_valid()
-                    formExp.save(pers)
-                cExp += 1
-            cEdu = 0
-            dataEdu = {}.fromkeys(EducationForm.Meta.fields)
-            while cEdu <= int(request.POST['countEdu']):
-                if cEdu==0:
-                    formEdu = EducationForm(request.POST)
-                    formEdu.is_valid()
-                    if not [v for v in formEdu.cleaned_data.values() if v]:
-                        cEdu += 1
-                        continue
-                    formEdu.save(pers)
-                else:
-                    for k in dataEdu.keys():
-                        dataEdu[k] = request.POST[k+str(cEdu)]
-                    if not [v for v in formEdu.cleaned_data.values() if v]:
-                        cEdu += 1
-                        continue
-                    formEdu = EducationForm(dataEdu)
-                    formEdu.is_valid()
-                    formEdu.save(pers)
-                cEdu += 1
-            mail_file = export_to_xls(pers)
+            # print(form)
+            if formEdu.is_valid():
+                print(formEdu)
+            # if formRes.is_valid() and formRes.cleaned_data['residence']!='':
+            #     formRes.save(pers)
+            # cExp = 0
+            # dataExp = {}.fromkeys(ExpirienceForm.Meta.fields)
+            # while cExp <= int(request.POST['countExp']):
+            #     if cExp==0:
+            #         formExp = ExpirienceForm(request.POST)
+            #         formExp.is_valid()
+            #         if not [v for v in formExp.cleaned_data.values() if v]:
+            #             cExp += 1
+            #             continue
+            #         formExp.save(pers)
+            #     else:
+            #         for k in dataExp.keys():
+            #             dataExp[k] = request.POST[k+str(cExp)]
+            #         if not [v for v in dataExp.values() if v]:
+            #             cExp += 1
+            #             continue
+            #         formExp = ExpirienceForm(dataExp)
+            #         formExp.is_valid()
+            #         formExp.save(pers)
+            #     cExp += 1
+            # cEdu = 0
+            # dataEdu = {}.fromkeys(EducationForm.Meta.fields)
+            # while cEdu <= int(request.POST['countEdu']):
+            #     if cEdu==0:
+            #         formEdu = EducationForm(request.POST)
+            #         formEdu.is_valid()
+            #         if not [v for v in formEdu.cleaned_data.values() if v]:
+            #             cEdu += 1
+            #             continue
+            #         formEdu.save(pers)
+            #     else:
+            #         for k in dataEdu.keys():
+            #             dataEdu[k] = request.POST[k+str(cEdu)]
+            #         if not [v for v in formEdu.cleaned_data.values() if v]:
+            #             cEdu += 1
+            #             continue
+            #         formEdu = EducationForm(dataEdu)
+            #         formEdu.is_valid()
+            #         formEdu.save(pers)
+            #     cEdu += 1
+            # mail_file = export_to_xls(pers)
             # emailSenderTwo(mail_file)
             return HttpResponseRedirect('thanks.html')
     else:

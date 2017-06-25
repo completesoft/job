@@ -27,7 +27,7 @@ SECRET_KEY = 'g*&@+0vm2qf&-mn-@1rhw%llxmdvbnle+f=@&gh)^we&23tkb('
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # E-mail config
     #for testingw
@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'import_export',
     'templated_docs',
+    'bootstrap3',
 ]
 
 MIDDLEWARE = [

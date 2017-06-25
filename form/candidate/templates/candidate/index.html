@@ -1,842 +1,439 @@
 <!DOCTYPE html>
 <html lang="ru-RU">
-<head>
+  <head>
     {% load staticfiles %}
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-    <link type="text/css" href="{% static 'candidate/css/index_style.css' %}" rel="stylesheet">
-    <script type="text/javascript" src="{% static 'candidate/js/index.js' %}"></script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="favicon.ico">
+
     <title>Анкета кандидата</title>
-</head>
-<body>
-    <header>
-        <h1>Анкета кандидата</h1>
-        <p>Внимание! Все пункты обязательны для заполнения.</p>
-        <p>Мы не гарантируем Вам трудоустройство, но Ваша анкета будет храниться в нашем кадровом банке, и
-            мы обязательно свяжемся с Вами, если увидим в Вас, потенциального кандидата на конкретную вакансию
-        </p>
-    </header>
-    <div class="content">
-        <form name="form1" class="main" action="{% url 'candidate:index' %}" method="post" autocomplete="off" onsubmit="finalyze()" id="mainForm">
+
+    <link href="{% static 'candidate/css/bootstrap.min.css' %}" rel="stylesheet">
+    <!-- <link href="{% static 'candidate/css/bootstrap-datepicker.min.css' %}" rel="stylesheet"> -->
+    <link href="{% static 'candidate/css/bootstrap-datetimepicker.min.css' %}" rel="stylesheet">
+
+    <link href="{% static 'candidate/css/form.css' %}" rel="stylesheet">
+
+
+    <script type="text/javascript" src="{% static 'candidate/js/jquery.js' %}"></script>
+    <!-- <script type="text/javascript" src="{% static 'candidate/js/bootstrap-datepicker.min.js' %}"></script> -->
+    <!-- <script type="text/javascript" src="{% static 'candidate/js/bootstrap-datepicker.ru.min.js' %}"></script> -->
+
+    <script type="text/javascript" src="{% static 'candidate/js/bootstrap-datetimepicker.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'candidate/js/bootstrap-datetimepicker.ru.js' %}"></script>
+
+
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+
+    <script>
+      function fillDay(select_id){
+        for (var i = 1; i <= 31; i++) {
+          $(select_id).append('<option value="">' + i + '</option>');
+        }
+      }
+
+
+      function fillMonth(select_id){
+        var arr_Month = [
+          "Январь","Февраль","Март", "Апрель", "Май", "Июнь",
+          "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
+        for (var i = 0; i < 12; i++) {
+            $(select_id).append('<option value="">' + arr_Month[i] + '</option>');
+        }
+      }
+
+
+      function fillYear(select_id, min_age, max_age){
+        var current_year = (new Date).getFullYear();
+        for (var i = current_year - max_age; i <= current_year - min_age; i++) {
+          $(select_id).append('<option value="">' + i + '</option>');
+        }
+      }
+
+
+      function addEducation(){
+         alert("123");
+
+      }
+
+      var block_id_map = new Map();
+
+
+      function addBlock(source, destination){
+
+          if (block_id_map.get(source)) {
+            old_id = block_id_map.get(source);
+            block_id_map.set(source, old_id + 1);
+          }
+          else {
+            block_id_map.set(source, 2);
+          }
+
+          var block = $(source).clone();
+          console.log($(block));
+          block.attr("id", $(source).attr("id") + block_id_map.get(source));
+          // block.children().each(function(){
+          //   $(this).children().each(function(){
+          //     var current_id = $(this).attr("id");
+          //     $(this).attr("id", current_id + block_id_map.get(source));
+          //     $(this).val("");
+          //   });
+          // });
+
+          block.find("*").each(function(){
+              var current_id = $(this).attr("id");
+              var current_for = $(this).attr("for");
+
+              if (current_id) {
+                $(this).attr("id", current_id + block_id_map.get(source));
+                $(this).val("");
+              }
+
+              if (current_for) {
+                $(this).attr("for", current_for + block_id_map.get(source));
+              }
+
+          });
+
+          $(destination).append(block);
+
+      }
+
+
+      function addDateTimePicker(){
+        $('input[name*=start_date], input[name*=end_date]').datetimepicker({
+          format: "MM yyyy",
+          weekStart: 1,
+          startView: 4,
+          minView: 3,
+          language: "ru",
+          autoclose: true
+         });
+      }
+
+
+      $(document).ready(function(){
+          fillDay("#birth_day");
+          fillMonth("#birth_month");
+          fillYear("#birth_year", 14, 75);
+
+          $("#addr").hide();
+
+
+          $("#hide").click(function(){
+              $("#addr").hide(500);
+          });
+
+          $("#show").click(function(){
+              $("#addr").show(500);
+              $("#addr").focus();
+          });
+
+
+          // $("#quant_children").hide();
+          //
+          // $("#hide_children").click(function(){
+          //     $("#quant_children").hide(500);
+          // });
+
+          // $("#show_children").click(function(){
+          //     $("#quant_children").show(500);
+          //     $("#quant_children").focus();
+          // });
+
+
+          $('#id_passp_date').datetimepicker({
+            format: "dd.mm.yyyy",
+            weekStart: 1,
+            startView: 4,
+            minView: 2,
+            language: "ru",
+            autoclose: true,
+          });
+
+
+          $('#id_start').datetimepicker({
+            format: "dd.mm.yyyy",
+            weekStart: 1,
+            startView: 2,
+            minView: 2,
+            language: "ru",
+            autoclose: true,
+            startDate: new Date()
+          });
+
+
+          $('#id_birthday').datetimepicker({
+            format: "dd.mm.yyyy",
+            weekStart: 1,
+            startView: 4,
+            minView: 2,
+            language: "ru",
+            autoclose: true,
+            startDate: "-80y",
+            endDate: "-14y",
+
+          });
+
+
+
+          addDateTimePicker();
+
+          $("#add_education").click(function() {
+
+            addBlock("#education_block", "#education_div");
+            addDateTimePicker();
+          });
+
+
+
+          $("#add_exp").click(function() {
+
+            addBlock("#exp_block", "#exp_div");
+            addDateTimePicker();
+          });
+
+      });
+    </script>
+  </head>
+<body style="padding-bottom:400px;">
+
+  <div class="page-header">
+        <h1 class="text-center">Анкета кандидата</h1>
+  </div>
+
+<div class="col-sm-offset-3 col-sm-6 col-sm-offset-3" style="margin-bottom: 100px">
+  <div class="alert alert-warning">
+    <p><strong>Внимание!</strong> Все пункты обязательны для заполнения.</p>
+    <p>Мы не гарантируем Вам трудоустройство, но Ваша анкета будет храниться в
+      нашем кадровом банке, и мы обязательно свяжемся с Вами, если увидим в Вас
+       потенциального кандидата на конкретную вакансию.
+    </p>
+  </div>
+
+<div class="row">
+
+  {% load bootstrap3 %}
+
+</div>
+  <form name="form1" action="{% url 'candidate:index' %}" method="post" autocomplete="off" id="mainForm">
             {% csrf_token %}
-            <div class="block">
-                <h3 class="block-header">Личные данные</h3>
-                <div class="content-row">
-                    <lable class="description" for="id_position">Должность: </lable>
-                    <br>
-                    {{ form.position }}
-                </div>
-                <div class="content-row">
-                    <lable class="description" for="id_full_name">Фамилия, имя и отчество: </lable>
-                    <br>
-                    {{ form.full_name }}
-                </div>
-                <div class="content-row">
-                    <lable class="description" for="id_birthday">Дата рождения: </lable>
-                    <br>
-                        <select id="birth_day" name="birth" onchange="date_assemble(this.id)">
-                            <option value="1" disabled selected>День</option>
-                                <option value="1"  >
-                            01            </option>
-                                <option value="2"  >
-                            02            </option>
-                                <option value="3"  >
-                            03            </option>
-                                <option value="4"  >
-                            04            </option>
-                                <option value="5"  >
-                            05            </option>
-                                <option value="6"  >
-                            06            </option>
-                                <option value="7"  >
-                            07            </option>
-                                <option value="8"  >
-                            08            </option>
-                                <option value="9"  >
-                            09            </option>
-                                <option value="10"  >
-                            10            </option>
-                                <option value="11"  >
-                            11            </option>
-                                <option value="12"  >
-                            12            </option>
-                                <option value="13"  >
-                            13            </option>
-                                <option value="14"  >
-                            14            </option>
-                                <option value="15"  >
-                            15            </option>
-                                <option value="16"  >
-                            16            </option>
-                                <option value="17"  >
-                            17            </option>
-                                <option value="18"  >
-                            18            </option>
-                                <option value="19"  >
-                            19            </option>
-                                <option value="20"  >
-                            20            </option>
-                                <option value="21"  >
-                            21            </option>
-                                <option value="22"  >
-                            22            </option>
-                                <option value="23"  >
-                            23            </option>
-                                <option value="24"  >
-                            24            </option>
-                                <option value="25"  >
-                            25            </option>
-                                <option value="26"  >
-                            26            </option>
-                                <option value="27"  >
-                            27            </option>
-                                <option value="28"  >
-                            28            </option>
-                                <option value="29"  >
-                            29            </option>
-                                <option value="30"  >
-                            30            </option>
-                                <option value="31"  >
-                            31            </option>
-                        </select>
-                        <span> . </span>
-                        <!-- end of day -->
 
-                        <!-- month -->
-                        <select id="birth_month" name="birth" onchange="date_assemble(this.id)">
-                            <option value="0" disabled selected>Месяц</option>
-                                <option value="0" >
-                            Январь            </option>
-                                <option value="1" >
-                            Февраль            </option>
-                                <option value="2" >
-                            Март            </option>
-                                <option value="3" >
-                            Апрель            </option>
-                                <option value="4" >
-                            Май            </option>
-                                <option value="5" >
-                            Июнь            </option>
-                                <option value="6" >
-                            Июль            </option>
-                                <option value="7" >
-                            Август            </option>
-                                <option value="8" >
-                            Сентябрь            </option>
-                                <option value="9" >
-                            Октябрь            </option>
-                                <option value="10" >
-                            Ноябрь            </option>
-                                <option value="11" >
-                            Декабрь            </option>
-                        </select>
-                        <!-- end of month -->
-                        <span> . </span>
+                <div class="panel panel-primary">
+                  <div class="panel-heading">Личные данные</div>
+                  <div class="panel-body">
+                    {% bootstrap_field form.position %}
+                    {% bootstrap_field form.full_name %}
+                    <div class="row">
+                    <div class="col-sm-5">
+                      {% bootstrap_field form.birthday %}
 
-                        <!-- year -->
-                        <select id="birth_year" name="birth" onchange="date_assemble(this.id)">
-                        </select>
-                    <!-- end of year -->
-                    <div id="error_birth"></div>
-                    <input type="text" id="id_birthday" name="birthday" value="" hidden>
-                </div>
+                      <!-- <div class="form-group">
+                        <label class="control-label" for="id_birthday">Дата рождения</label>
+                        <fieldset class="form-inline">
+                          <select class="form-control" id="birth_day" name="birth" onchange="date_assemble(this.id)">
+                              <option value="1" disabled selected>День</option>
+                          </select>
+                          <select class="form-control" id="birth_month" name="birth" onchange="date_assemble(this.id)">
+                              <option value="1" disabled selected>Месяц</option>
+                          </select>
+                          <select class="form-control" id="birth_year" name="birth" onchange="date_assemble(this.id)">
+                              <option value="1" disabled selected>Год</option>
+                          </select>
 
-                <div class="content-row">
-                    <lable class="description" for="id_sex">Пол: </lable>
-                    <br>
-                    {{ form.gender }}
-                </div>
-            </div>
-            <div class="block">
-                <h3 class="block-header">Адрес прописки</h3>
-                <div class="content-row">
-                    <lable class="description" for="id_registration">Адрес прописки:</lable>
-                    <br>
-                    {{ form.registration }}
-                </div>
-            </div>
-            <div class="block">
-                <h3 class="block-header">Адрес проживания</h3>
-                <div class="content-row" id="residence_js">
-                    <lable class="description" for="id_position">Как в прописке?</lable>
-                    <br>
-                    <input type="radio" id="residence_yes" onclick="addResidence(this.id)" name="resid" value="True">
-                    <lable class="radio_lable" for="residence_yes">Да</lable>
-                    <br>
-                    <input type="radio" id="residence_not" onclick="addResidence(this.id)" name="resid" value="False">
-                    <lable class="radio_lable"  for="residence_not">Нет</lable>
-                    <input type="checkbox" id="residenceBool" name="residenceBool" checked="checked" hidden>
-                    <br>
-                </div>
-            </div>
-            <div class="block">
-                <h3 class="block-header">Контакты</h3>
-                <div class="content-row">
-                    <lable class="description" for="id_phone">Мобильный телефон:</lable>
-                    <br>
-                    {{ form.phone }}
-                    <br>
-                </div>
-            </div>
-            <div class="block">
-                <h3 class="block-header">Семья</h3>
-                <div class="content-row">
-                    <lable class="description" for="id_civil_status">Семейное положение:</lable>
-                    <br>
-                    {{ form.civil_status }}
-                    <br>
-                </div>
-                <div class="content-row">
-                    <lable class="description" for="id_children">Дети:</lable>
-                    <br>
-                    <input type="radio" id="children_yes" name="children" value="True" onclick="add_quant_children(this.id)">
-                    <lable class="radio_lable" for="residence_yes">Есть</lable>
-                    <br>
-                    <input type="radio" id="children_not" name="children" value="False" onclick="add_quant_children(this.id)">
-                    <lable class="radio_lable"  for="residence_not">Нет</lable>
-                    <br>
-                </div>
-                <div class="content-row" id="div_quant_children" hidden>
-                    <lable class="description" for="id_quant_children">Количество детей:</lable>
-                    <br>
-                    {{ form.quant_children }}
-                    <br>
-                </div>
-            </div>
-            <div class="block">
-                <h3 class="block-header">Паспорт</h3>
-                <div class="content-row">
-                    <lable class="description" for="id_passp_number">Серия, номер:</lable>
-                    <br>
-                    {{ form.passp_number }}
-                </div>
-                <div class="content-row">
-                    <lable class="description" for="id_passp_issue">Кем выдан:</lable>
-                    <br>
-                    {{ form.passp_issue }}
-                </div>
-                <div class="content-row">
-                    <lable class="description" for="id_passp_date">Дата выдачи:</lable>
-                    <br>
-                    <select id="passp_day" name="passp" onchange="date_assemble(this.id)">
-                            <option value="1" disabled selected>День</option>
-                                <option value="1"  >
-                            01            </option>
-                                <option value="2"  >
-                            02            </option>
-                                <option value="3"  >
-                            03            </option>
-                                <option value="4"  >
-                            04            </option>
-                                <option value="5"  >
-                            05            </option>
-                                <option value="6"  >
-                            06            </option>
-                                <option value="7"  >
-                            07            </option>
-                                <option value="8"  >
-                            08            </option>
-                                <option value="9"  >
-                            09            </option>
-                                <option value="10"  >
-                            10            </option>
-                                <option value="11"  >
-                            11            </option>
-                                <option value="12"  >
-                            12            </option>
-                                <option value="13"  >
-                            13            </option>
-                                <option value="14"  >
-                            14            </option>
-                                <option value="15"  >
-                            15            </option>
-                                <option value="16"  >
-                            16            </option>
-                                <option value="17"  >
-                            17            </option>
-                                <option value="18"  >
-                            18            </option>
-                                <option value="19"  >
-                            19            </option>
-                                <option value="20"  >
-                            20            </option>
-                                <option value="21"  >
-                            21            </option>
-                                <option value="22"  >
-                            22            </option>
-                                <option value="23"  >
-                            23            </option>
-                                <option value="24"  >
-                            24            </option>
-                                <option value="25"  >
-                            25            </option>
-                                <option value="26"  >
-                            26            </option>
-                                <option value="27"  >
-                            27            </option>
-                                <option value="28"  >
-                            28            </option>
-                                <option value="29"  >
-                            29            </option>
-                                <option value="30"  >
-                            30            </option>
-                                <option value="31"  >
-                            31            </option>
-                        </select>
-                        <span> . </span>
-                        <!-- end of day -->
+                        </fieldset>
+                        <input type="text" id="id_birthday" name="birthday" value="" hidden>
+                      </div> -->
 
-                        <!-- month -->
-                        <select id="passp_month" name="passp" onchange="date_assemble(this.id)">
-                            <option value="0" disabled selected>Месяц</option>
-                                <option value="0" >
-                            Январь            </option>
-                                <option value="1" >
-                            Февраль            </option>
-                                <option value="2" >
-                            Март            </option>
-                                <option value="3" >
-                            Апрель            </option>
-                                <option value="4" >
-                            Май            </option>
-                                <option value="5" >
-                            Июнь            </option>
-                                <option value="6" >
-                            Июль            </option>
-                                <option value="7" >
-                            Август            </option>
-                                <option value="8" >
-                            Сентябрь            </option>
-                                <option value="9" >
-                            Октябрь            </option>
-                                <option value="10" >
-                            Ноябрь            </option>
-                                <option value="11" >
-                            Декабрь            </option>
-                        </select>
-                        <!-- end of month -->
-                        <span> . </span>
 
-                        <!-- year -->
-                        <select id="passp_year" name="passp" onchange="date_assemble(this.id)">
-                        </select>
-                    <!-- end of year -->
-                    <div id="error_passp"></div>
-                    <input type="text" id="id_passp_date" name="passp_date" value="" hidden>
-                </div>
-            </div>
-            <div class="block" id="app_edu">
-                <h3 class="block-header">Образование и специальность</h3>
-                <lable class="description_2">Укажите учебные заведения, курсы, семинары, стажировки, которые Вы окончили</lable>
-                <div id="edu_div">
-                    <div class="content-row">
-                        <br>
-                        <lable class="description" for="edu_start_day">Дата начала:</lable>
-                        <br>
-                            <select id="edu_start_day" name="edu_start_day" hidden>
-                                    <option value="1" selected>День</option>
-                            </select>
-                            <!-- end of day -->
-
-                            <!-- month -->
-                            <select id="edu_start_month" name="edu_start_month" onchange="dateEduExp(this.id)">
-                                <option value="0" disabled selected>Месяц</option>
-                                    <option value="0" >
-                                Январь            </option>
-                                    <option value="1" >
-                                Февраль            </option>
-                                    <option value="2" >
-                                Март            </option>
-                                    <option value="3" >
-                                Апрель            </option>
-                                    <option value="4" >
-                                Май            </option>
-                                    <option value="5" >
-                                Июнь            </option>
-                                    <option value="6" >
-                                Июль            </option>
-                                    <option value="7" >
-                                Август            </option>
-                                    <option value="8" >
-                                Сентябрь            </option>
-                                    <option value="9" >
-                                Октябрь            </option>
-                                    <option value="10" >
-                                Ноябрь            </option>
-                                    <option value="11" >
-                                Декабрь            </option>
-                            </select>
-                            <!-- end of month -->
-                            <span> . </span>
-
-                            <!-- year -->
-                            <select id="edu_start_year" name="edu_start_year" onchange="dateEduExp(this.id)" >
-                            </select>
-                        <!-- end of year -->
-                        <input type="text" id="id_edu_start_date" name="start_date" value="" hidden>
-                        <br>
                     </div>
-                    <div class="content-row">
-                        <lable class="description" for="id_registration">Дата окончания:</lable>
-                        <br>
-                            <select id="edu_end_day" name="edu_end_day" hidden>
-                                    <option value="1" selected>День</option>
-                            </select>
-                            <!-- end of day -->
 
-                            <!-- month -->
-                            <select id="edu_end_month" name="edu_end_month" onchange="dateEduExp(this.id)">
-                                <option value="0" disabled selected>Месяц</option>
-                                    <option value="0" >
-                                Январь            </option>
-                                    <option value="1" >
-                                Февраль            </option>
-                                    <option value="2" >
-                                Март            </option>
-                                    <option value="3" >
-                                Апрель            </option>
-                                    <option value="4" >
-                                Май            </option>
-                                    <option value="5" >
-                                Июнь            </option>
-                                    <option value="6" >
-                                Июль            </option>
-                                    <option value="7" >
-                                Август            </option>
-                                    <option value="8" >
-                                Сентябрь            </option>
-                                    <option value="9" >
-                                Октябрь            </option>
-                                    <option value="10" >
-                                Ноябрь            </option>
-                                    <option value="11" >
-                                Декабрь            </option>
-                            </select>
-                            <!-- end of month -->
-                            <span> . </span>
+                      <div class="col-sm-4">
+                      {% bootstrap_field form.gender %}
+                      </div>
 
-                            <!-- year -->
-                            <select id="edu_end_year" name="edu_end_year" onchange="dateEduExp(this.id)">
-                            </select>
-                        <!-- end of year -->
-                        <input type="text" id="id_edu_end_date" name="end_date" value="" hidden>
-                        <br>
                     </div>
-                    <div class="content-row">
-                        <lable class="description" for="id_name_institute">Название учебного заведения, факультет, форма обучения:</lable>
-                        <br>
-                        {{ formEdu.name_institute }}
+                  </div>
+                </div>
+
+                <div class="panel panel-primary">
+                  <div class="panel-heading">Адреса</div>
+                  <div class="panel-body">
+                    {% bootstrap_field form.registration %}
+                    <label class="control-label" for="id_birthday">Адрес проживания</label>
+                    как в прописке?
+                    <div class="form-group">
+                      <label><input type="radio" name="resid" id="hide" checked> Да</label>
+                      <label><input type="radio" name="resid" id="show"> Нет</label>
                     </div>
-                    <div class="content-row">
-                        <lable class="description" for="id_qualification">Специальность:</lable>
-                        <br>
-                        {{ formEdu.qualification }}
+                    <textarea name="residence" class="form-control" id="addr" placeholder="Адрес проживания" rows="10"></textarea>
+                  </div>
+                </div>
+
+                <div class="panel panel-primary">
+                  <div class="panel-heading">Контакты</div>
+                  <div class="panel-body">
+                    {% bootstrap_field form.phone %}
+                  </div>
+                </div>
+
+                <div class="panel panel-primary">
+                  <div class="panel-heading">Семья</div>
+                  <div class="panel-body">
+                    {% bootstrap_field form.civil_status %}
+
+                    <!-- <label class="control-label" for="id_birthday">Дети</label>
+                    <div class="form-group">
+                      <label><input type="radio" name="children" id="hide_children" checked> Нет</label>
+                      <label><input type="radio" name="children" id="show_children"> Есть</label>
+                    </div> -->
+                    <div id="quant_children">
+                      {% bootstrap_field form.quant_children %}
+                    </div>
+                  </div>
+                </div>
+
+
+                <div class="panel panel-primary">
+                  <div class="panel-heading">Паспорт</div>
+                  <div class="panel-body">
+                    {% bootstrap_field form.passp_number %}
+                    {% bootstrap_field form.passp_issue %}
+                    {% bootstrap_field form.passp_date %}
+                  </div>
+                </div>
+
+
+                <div class="panel panel-primary">
+                  <div class="panel-heading">Образование и специальность</div>
+                  <div class="panel-body">
+                    <div class="alert alert-warning">
+                      Укажите учебные заведения, курсы, семинары, стажировки, которые Вы окончили
+                    </div>
+                    <div id="education_div">
+                      <fieldset id="education_block">
+                        {% bootstrap_field formEdu.start_date %}
+                        {% bootstrap_field formEdu.end_date %}
+                        {% bootstrap_field formEdu.name_institute %}
+                        {% bootstrap_field formEdu.qualification %}
+
+                        <hr />
+                        <!-- <input id="id_realdate" name="realdate" /> -->
+                      </fieldset>
+                    </div>
+                    <input id="add_education" type="button" class="btn btn-info" value="Добавить еще учебное заведение" />
+
+                  </div>
+                </div>
+
+
+
+                <div class="panel panel-primary">
+                  <div class="panel-heading">Опыт работы</div>
+                  <div class="panel-body">
+                    <div class="alert alert-warning">
+                      Опишите все предыдущие места работы, начиная с последнего или нынешнего места работы
+                    </div>
+                    <div id="exp_div">
+                      <fieldset id="exp_block">
+                        {% bootstrap_form formExp %}
+
+                        <hr />
+                        <!-- <input id="id_realdate" name="realdate" /> -->
+                      </fieldset>
+                    </div>
+                    <input id="add_exp" type="button" class="btn btn-info" value="Добавить еще место работы" />
+
+                  </div>
+                </div>
+
+
+
+                <div class="panel panel-primary">
+                  <div class="panel-heading">Дополнительные сведения</div>
+                  <div class="panel-body">
+                    {% bootstrap_field form.army %}
+                    {% bootstrap_field form.army_id %}
+                    {% bootstrap_field form.driver_lic %}
+                    {% bootstrap_field form.car %}
+
+                    {% bootstrap_field form.advantage %}
+                    {% bootstrap_field form.disadvantage %}
+                    {% bootstrap_field form.convicted %}
+                    {% bootstrap_field form.illness %}
+                    {% bootstrap_field form.salary %}
+
+                  </div>
+                </div>
+
+
+
+
+                <div class="panel panel-primary">
+                  <div class="panel-heading">Рекомендатели</div>
+                  <div class="panel-body">
+                    <div class="alert alert-warning">
+                      Укажите 2-х человек, которые могли бы Вас рекомендовать
+                    </div>
+                    <label class="control-label">1 рекомендатель</label>
+                    {% bootstrap_field form.ref1_full_name %}
+                    {% bootstrap_field form.ref1_position %}
+                    {% bootstrap_field form.ref1_workplace %}
+                    {% bootstrap_field form.ref1_phone %}
+                    <hr />
+                    <label class="control-label">2 рекомендатель</label>
+                    {% bootstrap_field form.ref2_full_name %}
+                    {% bootstrap_field form.ref2_position %}
+                    {% bootstrap_field form.ref2_workplace %}
+                    {% bootstrap_field form.ref2_phone %}
+
+                  </div>
+                </div>
+
+
+
+                <div class="panel panel-primary">
+                  <div class="panel-heading">Прочее</div>
+                  <div class="panel-body">
+                    {% bootstrap_field form.source_about_as %}
+                    {% bootstrap_field form.add_details %}
+                    {% bootstrap_field form.start %}
+
+
+                  </div>
+                </div>
+
+
+
+
+                <div class="alert alert-info">
+                  Я понимаю, что любое неправильное предоставление информации,
+                      либо неточности в данной анкете, могут привести к отказу в приеме на работу.
+                      Я несу полную ответственность за достоверность всей информации, указанной в анкете,
+                      и понимаю, что недостоверность информации может стать причиной моего дальнейшего увольнения
+                    <div class="form-group">
+                      <label><input type="checkbox" required /> Да</label>
                     </div>
                 </div>
-                <div class="content-row" id="edu_js">
-                    <lable class="description">Добавить ещё учебное заведение?</lable>
-                    <br>
-                    <input type="button" id="edu_add" onclick="addEdu(this.id)" name="edu" value="Да, добавить">
-                </div>
-            </div>
-            <div class="block">
-                <h3 class="block-header">Дополнительные сведения</h3>
-                <div class="content-row">
-                    <lable class="description">Служба в армии:</lable>
-                    <br>
-                    <input type="radio" id="army_yes" name="army" value="True">
-                    <lable class="radio_lable" for="army_yes">Призывался</lable>
-                    <br>
-                    <input type="radio" id="army_not" name="army" value="False">
-                    <lable class="radio_lable"  for="army_not">Непризывался</lable>
-                    <br>
-                </div>
-                <div class="content-row">
-                    <lable class="description">Военный билет:</lable>
-                    <br>
-                    <input type="radio" id="army_id_yes" name="army_id" value="True">
-                    <lable class="radio_lable" for="army_id_yes">Есть</lable>
-                    <br>
-                    <input type="radio" id="army_id_not" name="army_id" value="False">
-                    <lable class="radio_lable"  for="army_id_not">Нет</lable>
-                    <br>
-                </div>
-                <div class="content-row">
-                    <lable class="description">Водительское удостоверение:</lable>
-                    <br>
-                    <input type="radio" id="driver_lic_yes" name="driver_lic" value="True">
-                    <lable class="radio_lable" for="driver_lic_yes">Есть</lable>
-                    <br>
-                    <input type="radio" id="driver_lic_not" name="driver_lic" value="False">
-                    <lable class="radio_lable"  for="driver_lic_not">Нет</lable>
-                    <br>
-                </div>
-                <div class="content-row">
-                    <lable class="description">Личный автомобиль:</lable>
-                    <br>
-                    <input type="radio" id="car_yes" name="car" value="True">
-                    <lable class="radio_lable" for="car_yes">Есть</lable>
-                    <br>
-                    <input type="radio" id="car_not" name="car" value="False">
-                    <lable class="radio_lable"  for="car_not">Нет</lable>
-                    <br>
-                </div>
-                <div class="content-row">
-                    <lable class="description" for="id_advantage">Ваши сильные стороны:</lable>
-                    <br>
-                    {{ form.advantage }}
-                </div>
-                <div class="content-row">
-                    <lable class="description" for="id_disadvantage">Ваши слабые стороны:</lable>
-                    <br>
-                    {{ form.disadvantage }}
-                </div>
-                <div class="content-row">
-                    <lable class="description">Привлекались ли Вы к ответственности (административной, уголовной и т.д.):</lable>
-                    <br>
-                    <input type="radio" id="convicted_yes" name="convicted" value="True">
-                    <lable class="radio_lable" for="convicted_yes">Да</lable>
-                    <br>
-                    <input type="radio" id="convicted_not" name="convicted" value="False">
-                    <lable class="radio_lable"  for="convicted_not">Нет</lable>
-                    <br>
-                </div>
-                <div class="content-row">
-                    <lable class="description">Страдаете ли Вы хроническими заболеваниями?</lable>
-                    <br>
-                    <input type="radio" id="illness_yes" name="illness" value="True">
-                    <lable class="radio_lable" for="illness_yes">Да</lable>
-                    <br>
-                    <input type="radio" id="illness_not" name="illness" value="False">
-                    <lable class="radio_lable"  for="illness_not">Нет</lable>
-                    <br>
-                </div>
-                <div class="content-row salary">
-                    <lable class="description" for="id_salary">Какую заработную плату Вы хотите получать?</lable>
-                    <br>
-                    {{ form.salary }}<span> грн.</span>
-                </div>
-            </div>
-            <div class="block" id="app_exp">
-                <h3 class="block-header">Опыт работы</h3>
-                <lable class="description_2">Опишите все предыдущие места работы, начиная с последнего или нынешнего места работы </lable>
-                <div id="exp_div">
-                    <div class="content-row">
-                        <br>
-                        <lable class="description">Период работы с:</lable>
-                        <br>
-                            <select id="exp_start_day" name="exp_start_day" hidden>
-                                    <option value="1" selected>День</option>
-                            </select>
-                            <!-- end of day -->
 
-                            <!-- month -->
-                            <select id="exp_start_month" name="exp_start_month" onchange="dateEduExp(this.id)">
-                                <option value="0" disabled selected>Месяц</option>
-                                    <option value="0" >
-                                Январь            </option>
-                                    <option value="1" >
-                                Февраль            </option>
-                                    <option value="2" >
-                                Март            </option>
-                                    <option value="3" >
-                                Апрель            </option>
-                                    <option value="4" >
-                                Май            </option>
-                                    <option value="5" >
-                                Июнь            </option>
-                                    <option value="6" >
-                                Июль            </option>
-                                    <option value="7" >
-                                Август            </option>
-                                    <option value="8" >
-                                Сентябрь            </option>
-                                    <option value="9" >
-                                Октябрь            </option>
-                                    <option value="10" >
-                                Ноябрь            </option>
-                                    <option value="11" >
-                                Декабрь            </option>
-                            </select>
-                            <!-- end of month -->
-                            <span> . </span>
 
-                            <!-- year -->
-                            <select id="exp_start_year" name="exp_start_year" onchange="dateEduExp(this.id)">
-                            </select>
-                        <!-- end of year -->
-                        <input type="text" id="id_exp_start_date" name="exp_start_date" value="" hidden>
-                        <br>
-                    </div>
-                    <div class="content-row">
-                        <lable class="description">Период работы по:</lable>
-                        <br>
-                            <select id="exp_end_day" name="exp_end_day" hidden>
-                                    <option value="1" selected>День</option>
-                            </select>
-                            <!-- end of day -->
 
-                            <!-- month -->
-                            <select id="exp_end_month" name="exp_end_month" onchange="dateEduExp(this.id)">
-                                <option value="0" disabled selected>Месяц</option>
-                                    <option value="0" >
-                                Январь            </option>
-                                    <option value="1" >
-                                Февраль            </option>
-                                    <option value="2" >
-                                Март            </option>
-                                    <option value="3" >
-                                Апрель            </option>
-                                    <option value="4" >
-                                Май            </option>
-                                    <option value="5" >
-                                Июнь            </option>
-                                    <option value="6" >
-                                Июль            </option>
-                                    <option value="7" >
-                                Август            </option>
-                                    <option value="8" >
-                                Сентябрь            </option>
-                                    <option value="9" >
-                                Октябрь            </option>
-                                    <option value="10" >
-                                Ноябрь            </option>
-                                    <option value="11" >
-                                Декабрь            </option>
-                            </select>
-                            <!-- end of month -->
-                            <span> . </span>
+                <input type="submit" class="btn btn-success" id="sub_button" value="Отправить"/>
+    </form>
+</div>
 
-                            <!-- year -->
-                            <select id="exp_end_year" name="exp_end_year" onchange="dateEduExp(this.id)">
-                            </select>
-                        <!-- end of year -->
-                        <input type="text" id="id_exp_end_date" name="exp_end_date" value="" hidden>
-                        <br>
-                    </div>
-                    <div class="content-row">
-                        <lable class="description" for="id_workplace">Место работы:</lable>
-                        <br>
-                        {{ formExp.workplace }}
-                    </div>
-                    <div class="content-row">
-                        <lable class="description" for="id_exp_position">Должность:</lable>
-                        <br>
-                        {{ formExp.exp_position }}
-                    </div>
-                    <div class="content-row">
-                        <lable class="description" for="id_responsibility">Обязанности:</lable>
-                        <br>
-                        {{ formExp.responsibility }}
-                    </div>
-                    <div class="content-row salary">
-                        <lable class="description" for="id_exp_salary">Уровень заработной платы:</lable>
-                        <br>
-                        {{ formExp.exp_salary }}<span> грн.</span>
-                    </div>
-                    <div class="content-row">
-                        <lable class="description" for="id_reason_leaving">Причина увольнения:</lable>
-                        <br>
-                        {{ formExp.reason_leaving }}
-                    </div>
-                </div>
-                <div class="content-row" id="exp_js">
-                    <lable class="description">Добавить ещё место работы?</lable>
-                    <br>
-                    <input type="button" id="exp_add" onclick="addExp(this.id)" name="exp" value="Да, добавить">
-                </div>
-            </div>
-            <div class="block">
-                <h3 class="block-header">Прочее</h3>
-                <lable class="description_2">Укажите 2-х человек, которые могли бы Вас рекомендовать</lable>
-                <div class="content-row">
-                    <br>
-                    <lable class="description">1 рекомендатель</lable>
-                    <br>
-                    <div class="block-referrer">
-                        <div class="col">
-                            <lable class="description"  for="id_ref1_full_name">ФИО</lable>
-                            {{ form.ref1_full_name }}
-                        </div>
-                        <div class="col">
-                            <lable class="description"  for="id_ref1_position">Должность</lable>
-                            {{ form.ref1_position }}
-                        </div>
-                        <div class="col">
-                            <lable class="description"  for="id_ref1_workplace">Название организации</lable>
-                            {{ form.ref1_workplace }}
-                        </div>
-                        <div class="col">
-                            <lable class="description"  for="id_ref1_phone">Телефон</lable>
-                            {{ form.ref1_phone }}
-                        </div>
-                    </div>
-                    <br>
-                    <lable class="description">2 рекомендатель</lable>
-                    <br>
-                    <div class="block-referrer">
-                        <div class="col">
-                            <lable class="description"  for="id_ref2_full_name">ФИО</lable>
-                            {{ form.ref2_full_name }}
-                        </div>
-                        <div class="col">
-                            <lable class="description"  for="id_ref2_position">Должность</lable>
-                            {{ form.ref2_position }}
-                        </div>
-                        <div class="col">
-                            <lable class="description"  for="id_ref2_workplace">Название организации</lable>
-                            {{ form.ref2_workplace }}
-                        </div>
-                        <div class="col">
-                            <lable class="description"  for="id_ref2_phone">Телефон</lable>
-                            {{ form.ref2_phone }}
-                        </div>
-                    </div>
-                </div>
-                <br>
-                <div class="content-row">
-                    <br>
-                    <lable class="description" for="id_source_about_as">Из какого источника Вы узнали о нашей вакансии:</lable>
-                    <br>
-                    {{ form.source_about_as }}
-                </div>
-                <div class="content-row">
-                    <lable class="description" for="id_add_details">Дополнительные сведения, которые Вы желаете сообщить о себе:</lable>
-                    <br>
-                    {{ form.add_details }}
-                </div>
 
-                <div class="content-row">
-                    <lable class="description" for="id_birthday">Когда вы можете начать работать</lable>
-                    <br>
-                        <select id="start_day" name="start_s" onchange="date_assemble(this.id)">
-                            <option value="1" disabled selected>День</option>
-                                <option value="1"  >
-                            01            </option>
-                                <option value="2"  >
-                            02            </option>
-                                <option value="3"  >
-                            03            </option>
-                                <option value="4"  >
-                            04            </option>
-                                <option value="5"  >
-                            05            </option>
-                                <option value="6"  >
-                            06            </option>
-                                <option value="7"  >
-                            07            </option>
-                                <option value="8"  >
-                            08            </option>
-                                <option value="9"  >
-                            09            </option>
-                                <option value="10"  >
-                            10            </option>
-                                <option value="11"  >
-                            11            </option>
-                                <option value="12"  >
-                            12            </option>
-                                <option value="13"  >
-                            13            </option>
-                                <option value="14"  >
-                            14            </option>
-                                <option value="15"  >
-                            15            </option>
-                                <option value="16"  >
-                            16            </option>
-                                <option value="17"  >
-                            17            </option>
-                                <option value="18"  >
-                            18            </option>
-                                <option value="19"  >
-                            19            </option>
-                                <option value="20"  >
-                            20            </option>
-                                <option value="21"  >
-                            21            </option>
-                                <option value="22"  >
-                            22            </option>
-                                <option value="23"  >
-                            23            </option>
-                                <option value="24"  >
-                            24            </option>
-                                <option value="25"  >
-                            25            </option>
-                                <option value="26"  >
-                            26            </option>
-                                <option value="27"  >
-                            27            </option>
-                                <option value="28"  >
-                            28            </option>
-                                <option value="29"  >
-                            29            </option>
-                                <option value="30"  >
-                            30            </option>
-                                <option value="31"  >
-                            31            </option>
-                        </select>
-                        <span> . </span>
-                        <!-- end of day -->
 
-                        <!-- month -->
-                        <select id="start_month" name="start_s" onchange="date_assemble(this.id)">
-                            <option value="0" disabled selected>Месяц</option>
-                                <option value="0" >
-                            Январь            </option>
-                                <option value="1" >
-                            Февраль            </option>
-                                <option value="2" >
-                            Март            </option>
-                                <option value="3" >
-                            Апрель            </option>
-                                <option value="4" >
-                            Май            </option>
-                                <option value="5" >
-                            Июнь            </option>
-                                <option value="6" >
-                            Июль            </option>
-                                <option value="7" >
-                            Август            </option>
-                                <option value="8" >
-                            Сентябрь            </option>
-                                <option value="9" >
-                            Октябрь            </option>
-                                <option value="10" >
-                            Ноябрь            </option>
-                                <option value="11" >
-                            Декабрь            </option>
-                        </select>
-                        <!-- end of month -->
-                        <span> . </span>
 
-                        <!-- year -->
-                        <select id="start_year" name="start_s" onchange="date_assemble(this.id)">
-                        </select>
-                    <!-- end of year -->
-                    <div id="error_start"></div>
-                    <input type="text" id="id_start" name="start" value="" hidden>
-                </div>
-            </div>
-            <div class="block">
-                <div class="content-row">
-                    <br>
-                    <div class="footer">Я понимаю, что любое неправильное предоставление информации,
-                        либо неточности в данной анкете, могут привести к отказу в приеме на работу.
-                        Я несу полную ответственность за достоверность всей информации, указанной в анкете,
-                        и понимаю, что недостоверность информации может стать причиной моего дальнейшего увольнения
-                    </div>
-                    <br>
-                    <input type="checkbox" value="Yes" required="">
-                    <lable class="description">Да</lable>
-                </div>
-            </div>
-            <div class="">
-                <input type="submit" class="submit" id="sub_button" value="Отправить"/>
-            </div>
-            <div class="filler"></div>
-            <input type="text" id="countRes" name="countRes" value="" hidden>
-            <input type="text" id="countEdu" name="countEdu" value="" hidden>
-            <input type="text" id="countExp" name="countExp" value="" hidden>
-        </form>
-    </div>
-<!--<script type="text/javascript">populatedYear()</script>-->
+
 </body>
 </html>
