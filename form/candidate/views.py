@@ -9,73 +9,53 @@ from form.settings import EXPORT_DIR
 import xlsxwriter
 import os.path
 from datetime import date
+from django.forms import formset_factory
 
 def person(request):
     if request.method == 'POST':
-        print(request.POST.getlist("qualification"))
         form = PersonForm(request.POST)
         formRes = ResidenceForm(request.POST)
-        formEdu = EducationForm()
-        formExp = ExpirienceForm()
+        # formset
+        EduFormSet = formset_factory(EducationForm)
+        edu_formset = EduFormSet(request.POST, prefix='education')
+        ExpFormSet = formset_factory(ExpirienceForm)
+        exp_formset = ExpFormSet(request.POST, prefix='expirience')
+
         if form.is_valid():
             pers = form.save()
-            # print(form)
-            if formEdu.is_valid():
-                print(formEdu)
-            # if formRes.is_valid() and formRes.cleaned_data['residence']!='':
-            #     formRes.save(pers)
-            # cExp = 0
-            # dataExp = {}.fromkeys(ExpirienceForm.Meta.fields)
-            # while cExp <= int(request.POST['countExp']):
-            #     if cExp==0:
-            #         formExp = ExpirienceForm(request.POST)
-            #         formExp.is_valid()
-            #         if not [v for v in formExp.cleaned_data.values() if v]:
-            #             cExp += 1
-            #             continue
-            #         formExp.save(pers)
-            #     else:
-            #         for k in dataExp.keys():
-            #             dataExp[k] = request.POST[k+str(cExp)]
-            #         if not [v for v in dataExp.values() if v]:
-            #             cExp += 1
-            #             continue
-            #         formExp = ExpirienceForm(dataExp)
-            #         formExp.is_valid()
-            #         formExp.save(pers)
-            #     cExp += 1
-            # cEdu = 0
-            # dataEdu = {}.fromkeys(EducationForm.Meta.fields)
-            # while cEdu <= int(request.POST['countEdu']):
-            #     if cEdu==0:
-            #         formEdu = EducationForm(request.POST)
-            #         formEdu.is_valid()
-            #         if not [v for v in formEdu.cleaned_data.values() if v]:
-            #             cEdu += 1
-            #             continue
-            #         formEdu.save(pers)
-            #     else:
-            #         for k in dataEdu.keys():
-            #             dataEdu[k] = request.POST[k+str(cEdu)]
-            #         if not [v for v in formEdu.cleaned_data.values() if v]:
-            #             cEdu += 1
-            #             continue
-            #         formEdu = EducationForm(dataEdu)
-            #         formEdu.is_valid()
-            #         formEdu.save(pers)
-            #     cEdu += 1
-            # mail_file = export_to_xls(pers)
-            # emailSenderTwo(mail_file)
-            return HttpResponseRedirect('thanks.html')
+            if request.POST['residence']!='':
+                formRes.save(pers)
+            if edu_formset.is_valid():
+                for form in edu_formset:
+                    form.save(pers)
+            if exp_formset.is_valid():
+                for form in exp_formset:
+                    form.save(pers)
+        # mail_file = export_to_xls(pers)
+        # emailSenderTwo(mail_file)
+                return HttpResponseRedirect('thanks.html')
     else:
+        edu_prefix = 'education'
+        data_ed = {'{}-TOTAL_FORMS'.format(edu_prefix): '1',
+                '{}-INITIAL_FORMS'.format(edu_prefix): '1',
+                '{}-MAX_NUM_FORMS'.format(edu_prefix): '',
+                }
+        data_ex = {'{}-TOTAL_FORMS'.format('expirience'): '1',
+                   '{}-INITIAL_FORMS'.format('expirience'): '1',
+                   '{}-MAX_NUM_FORMS'.format('expirience'): '',
+                   }
         form = PersonForm()
         formRes = ResidenceForm()
-        formEdu = EducationForm()
-        formExp = ExpirienceForm()
-    return render(request, 'candidate/index.html', {'form':form, 'formRes':formRes ,'formEdu':formEdu, 'formExp': formExp})
+        EduFormSet = formset_factory(EducationForm, extra=1)
+        edu_formset = EduFormSet(data_ed, prefix=edu_prefix)
+        ExpFormSet = formset_factory(ExpirienceForm, extra=1)
+        exp_formset = ExpFormSet(data_ex, prefix='expirience')
+    return render(request, 'candidate/index_set.html', {'form':form, 'formRes':formRes ,'edu_formset':edu_formset, 'exp_formset': exp_formset})
+
 
 def thanks(request):
     return render(request, 'candidate/thanks.html')
+
 
 def emailSender(person):
     subject = 'Новая анкета'

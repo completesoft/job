@@ -38,7 +38,7 @@ class PersonAdmin(ImportMixin, admin.ModelAdmin):
     fieldsets = [
         ('Личные данные:', {'fields':['start',('position', 'full_name', 'birthday'), 'gender', 'registration', 'residenceBool']}),
         ('Контакты:',{'fields':['phone']}),
-        ('Семья:', {'fields': [('civil_status','children', 'quant_children')]}),
+        ('Семья:', {'fields': [('civil_status', 'quant_children')]}),
         ('Паспортные данные:', {'fields': ['passp_number', 'passp_issue', 'passp_date']}),
         ('Рекомендатель №1:', {'fields': [('ref1_full_name', 'ref1_position', 'ref1_workplace', 'ref1_phone')]}),
         ('Рекомендатель №2:', {'fields': [('ref2_full_name', 'ref2_position', 'ref2_workplace', 'ref2_phone')]}),

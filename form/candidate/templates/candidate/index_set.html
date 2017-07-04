@@ -13,15 +13,9 @@
 
     <script type="text/javascript" src="{% static 'candidate/js/jquery.js' %}"></script>
     <link href="{% static 'candidate/css/bootstrap.min.css' %}" rel="stylesheet">
-    <!-- <link href="{% static 'candidate/css/bootstrap-datepicker.min.css' %}" rel="stylesheet"> -->
     <link href="{% static 'candidate/css/bootstrap-datetimepicker.min.css' %}" rel="stylesheet">
 
     <link href="{% static 'candidate/css/form.css' %}" rel="stylesheet">
-
-
-
-    <!-- <script type="text/javascript" src="{% static 'candidate/js/bootstrap-datepicker.min.js' %}"></script> -->
-    <!-- <script type="text/javascript" src="{% static 'candidate/js/bootstrap-datepicker.ru.min.js' %}"></script> -->
 
     <script type="text/javascript" src="{% static 'candidate/js/bootstrap-datetimepicker.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'candidate/js/bootstrap-datetimepicker.ru.js' %}"></script>
@@ -61,50 +55,40 @@
       }
 
 
-      function addEducation(){
-         alert("123");
+      <!--function addEducation(){-->
+         <!--alert("123");-->
 
-      }
-
-      var block_id_map = new Map();
+      <!--}-->
 
 
-      function addBlock(source, destination){
 
-          if (block_id_map.get(source)) {
-            old_id = block_id_map.get(source);
-            block_id_map.set(source, old_id + 1);
-          }
-          else {
-            block_id_map.set(source, 2);
-          }
+      function addBlock(source, destination, forms_counter, init_forms){
 
+          var currentcount = parseInt($(forms_counter).val());
           var block = $(source).clone();
-          console.log($(block));
-          block.attr("id", $(source).attr("id") + block_id_map.get(source));
-          // block.children().each(function(){
-          //   $(this).children().each(function(){
-          //     var current_id = $(this).attr("id");
-          //     $(this).attr("id", current_id + block_id_map.get(source));
-          //     $(this).val("");
-          //   });
-          // });
 
           block.find("*").each(function(){
               var current_id = $(this).attr("id");
               var current_for = $(this).attr("for");
+              var current_name = $(this).attr("name");
 
               if (current_id) {
-                $(this).attr("id", current_id + block_id_map.get(source));
+                $(this).attr("id",  current_id.replace("0", currentcount+1));
                 $(this).val("");
               }
 
               if (current_for) {
-                $(this).attr("for", current_for + block_id_map.get(source));
+                $(this).attr("for", current_for.replace("0", currentcount+1));
+              }
+
+              if (current_name) {
+                $(this).attr("name", current_name.replace("0", currentcount+1));
               }
 
           });
 
+          $(forms_counter).val(currentcount+1);
+          $(init_forms).val(currentcount+1);
           $(destination).append(block);
 
       }
@@ -138,18 +122,6 @@
               $("#addr").show(500);
               $("#addr").focus();
           });
-
-
-          // $("#quant_children").hide();
-          //
-          // $("#hide_children").click(function(){
-          //     $("#quant_children").hide(500);
-          // });
-
-          // $("#show_children").click(function(){
-          //     $("#quant_children").show(500);
-          //     $("#quant_children").focus();
-          // });
 
 
           $('#id_passp_date').datetimepicker({
@@ -191,7 +163,7 @@
 
           $("#add_education").click(function() {
 
-            addBlock("#education_block", "#education_div");
+            addBlock("#education_block", "#education_div", "#id_education-TOTAL_FORMS", "#id_education-INITIAL_FORMS");
             addDateTimePicker();
           });
 
@@ -199,7 +171,7 @@
 
           $("#add_exp").click(function() {
 
-            addBlock("#exp_block", "#exp_div");
+            addBlock("#exp_block", "#exp_div", "#id_expirience-TOTAL_FORMS", "#id_expirience-INITIAL_FORMS");
             addDateTimePicker();
           });
 
@@ -237,25 +209,6 @@
                     <div class="row">
                     <div class="col-sm-5">
                       {% bootstrap_field form.birthday %}
-
-                      <!-- <div class="form-group">
-                        <label class="control-label" for="id_birthday">Дата рождения</label>
-                        <fieldset class="form-inline">
-                          <select class="form-control" id="birth_day" name="birth" onchange="date_assemble(this.id)">
-                              <option value="1" disabled selected>День</option>
-                          </select>
-                          <select class="form-control" id="birth_month" name="birth" onchange="date_assemble(this.id)">
-                              <option value="1" disabled selected>Месяц</option>
-                          </select>
-                          <select class="form-control" id="birth_year" name="birth" onchange="date_assemble(this.id)">
-                              <option value="1" disabled selected>Год</option>
-                          </select>
-
-                        </fieldset>
-                        <input type="text" id="id_birthday" name="birthday" value="" hidden>
-                      </div> -->
-
-
                     </div>
 
                       <div class="col-sm-4">
@@ -291,12 +244,6 @@
                   <div class="panel-heading">Семья</div>
                   <div class="panel-body">
                     {% bootstrap_field form.civil_status %}
-
-                    <!-- <label class="control-label" for="id_birthday">Дети</label>
-                    <div class="form-group">
-                      <label><input type="radio" name="children" id="hide_children" checked> Нет</label>
-                      <label><input type="radio" name="children" id="show_children"> Есть</label>
-                    </div> -->
                     <div id="quant_children">
                       {% bootstrap_field form.quant_children %}
                     </div>
@@ -321,18 +268,20 @@
                       Укажите учебные заведения, курсы, семинары, стажировки, которые Вы окончили
                     </div>
                     <div id="education_div">
-                      <fieldset id="education_block">
-                        {% bootstrap_field formEdu.start_date %}
-                        {% bootstrap_field formEdu.end_date %}
-                        {% bootstrap_field formEdu.name_institute %}
-                        {% bootstrap_field formEdu.qualification %}
-
-                        <hr />
-                        <!-- <input id="id_realdate" name="realdate" /> -->
-                      </fieldset>
+                      {{ edu_formset.management_form }}
+                        {% for form in edu_formset %}
+                          {% if forloop.first %}
+                            <fieldset id="education_block">
+                                {% bootstrap_form form %}
+                                <hr />
+                            </fieldset>
+                          {% else %}
+                            {% bootstrap_form form %}
+                            <hr />
+                          {% endif %}
+                        {% endfor %}
                     </div>
                     <input id="add_education" type="button" class="btn btn-info" value="Добавить еще учебное заведение" />
-
                   </div>
                 </div>
 
@@ -345,12 +294,18 @@
                       Опишите все предыдущие места работы, начиная с последнего или нынешнего места работы
                     </div>
                     <div id="exp_div">
-                      <fieldset id="exp_block">
-                        {% bootstrap_form formExp %}
-
-                        <hr />
-                        <!-- <input id="id_realdate" name="realdate" /> -->
-                      </fieldset>
+                      {{ exp_formset.management_form }}
+                        {% for form in exp_formset %}
+                          {% if forloop.first %}
+                            <fieldset id="exp_block">
+                                {% bootstrap_form form %}
+                                <hr />
+                            </fieldset>
+                          {% else %}
+                            {% bootstrap_form form %}
+                            <hr />
+                          {% endif %}
+                        {% endfor %}
                     </div>
                     <input id="add_exp" type="button" class="btn btn-info" value="Добавить еще место работы" />
 
