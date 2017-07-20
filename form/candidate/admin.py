@@ -1,13 +1,18 @@
 from django.contrib import admin
-from .models import Person, Residence_address, Experience, Education
+from django.forms import Form
+from .models import Person, Residence_address, Experience, Education, MailToGroup, MailToAddress
 from import_export import resources
 from import_export.admin import ExportActionModelAdmin, ImportExportModelAdmin, ImportMixin
+from django.conf.urls import url
 import xlsxwriter
 from templated_docs.http import FileResponse
 import os.path
 from datetime import date
 from form.settings import EXPORT_DIR
-
+from django.http import HttpResponse
+from django.template.response import TemplateResponse
+from django.contrib.contenttypes.models import ContentType
+from django.http import HttpResponseRedirect
 
 class PersonResource(resources.ModelResource):
     class Meta:
@@ -18,19 +23,26 @@ class ResidenceInline(admin.TabularInline):
     model = Residence_address
     extra = 0
 
-class ExpirienceInline(admin.TabularInline):
+class ExpirienceInline(admin.StackedInline):
     model = Experience
     extra = 0
+    fields = [
+        ('exp_start_date', 'exp_end_date'),
+        ('workplace', 'exp_position', 'exp_salary'),
+        ('responsibility', 'reason_leaving')
+    ]
+
 
 class EducationInline(admin.TabularInline):
     model = Education
     extra = 0
 
-class PersonAdmin(ImportMixin, admin.ModelAdmin):
+
+class PersonAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     inlines = [ResidenceInline, EducationInline, ExpirienceInline]
 
     resource_class = PersonResource
-    list_display = ['full_name', 'fill_date', 'position']
+    list_display = ['full_name', 'fill_date', 'position', 'mail_to_group']
     list_filter = ['fill_date', 'position']
     search_fields = ['full_name', 'position']
 
@@ -45,7 +57,90 @@ class PersonAdmin(ImportMixin, admin.ModelAdmin):
         ('Дополнительные сведения:', {'fields': ['army', 'army_id', 'driver_lic', 'car', 'advantage', 'disadvantage', 'convicted', 'illness', 'add_details', 'salary']}),
     ]
 
+
+    # def get_urls(self):
+    #     urls = super(PersonAdmin, self).get_urls()
+    #     my_urls = [
+    #         url(r'^xls/$',
+    #             self.admin_site.admin_view(self.exp_xls),
+    #             name='%s_%s_xls' % (self.model._meta.app_label, self.model._meta.model_name)),
+    #     ]
+    #     print(my_urls+urls)
+    #     return my_urls+urls
+
+    # def get_export_queryset(self, request):
+    #     """
+    #     Returns export queryset.
+    #
+    #     Default implementation respects applied search and filters.
+    #     """
+    #     # copied from django/contrib/admin/options.py
+    #     list_display = self.get_list_display(request)
+    #     list_display_links = self.get_list_display_links(request, list_display)
+    #
+    #     ChangeList = self.get_changelist(request)
+    #     cl = ChangeList(request, self.model, list_display,
+    #                     list_display_links, self.list_filter,
+    #                     self.date_hierarchy, self.search_fields,
+    #                     self.list_select_related, self.list_per_page,
+    #                     self.list_max_show_all, self.list_editable,
+    #                     self)
+    #
+    #     # query_set has been renamed to queryset in Django 1.8
+    #     return cl.queryset
+    #
+    # export_template_name = 'admin/export.html'
+
+    # def exp_xls(self, request, *args, **kwargs):
+    #     print(request.GET)
+    #     # queryset = self.get_export_queryset(request)
+    #     # print('Query: ',queryset)
+    #     form = ExportForm(request.POST or None)
+    #     if form.is_valid():
+    #         print("in form")
+    #         pass
+            # queryset = self.get_export_queryset(request)
+            # export_data = self.get_export_data(queryset, request=request)
+            # content_type = 'application/vnd.ms-excel'
+            # # Django 1.7 uses the content_type kwarg instead of mimetype
+            # try:
+            #     response = HttpResponse(export_data, content_type=content_type)
+            # except TypeError:
+            #
+            # response = HttpResponse(export_data, mimetype=content_type)
+            # response['Content-Disposition'] = 'attachment; filename=%s' % (
+            #     self.get_export_filename(file_format),
+            # )
+            #
+            # post_export.send(sender=None, model=self.model)
+            # return response
+
+        # context = {}
+        # context.update(self.admin_site.each_context(request))
+        # # elif django.VERSION >= (1, 7, 0):
+        # #     context.update(self.admin_site.each_context())
+        # print("In da context")
+        # print(request)
+        # context['title'] = "Export"
+        # context['form'] = form
+        # context['opts'] = self.model._meta
+        # request.current_app = self.admin_site.name
+        # return TemplateResponse(request, [self.export_template_name],
+        #                         context)
+
+
+
     actions = ['export_to_xls']
+
+    # def export_to_xls(self, request, queryset):
+    #     selected = request.POST.getlist(admin.ACTION_CHECKBOX_NAME)
+    #     ct = ContentType.objects.get_for_model(queryset.model)
+    #     return HttpResponseRedirect("xls/?ct=%s&ids=%s" % (ct.pk, ",".join(selected)))
+
+
+
+
+
 
     def export_to_xls(self, request, queryset):
         pers = queryset[0]
@@ -202,8 +297,11 @@ class PersonAdmin(ImportMixin, admin.ModelAdmin):
         ws.set_h_pagebreaks([breaker_1, breaker_2])
         workbook.close()
 
+
         mess = 'Анкета \"{}\" экспортирована в папку: \"{}\"'.format(pers.full_name, EXPORT_DIR)
         self.message_user(request, mess)
+
+
 
     export_to_xls.short_description = 'Экспорт в формате Excel'
 
@@ -212,11 +310,17 @@ def translateBool(boolVar):
     tmp = 'Да' if boolVar else 'Нет'
     return tmp
 
+class MailToAddressAdmin(admin.ModelAdmin):
+    list_display = ['full_name', 'email_address', 'group']
 
 
+class MailToGroupAdmin(admin.ModelAdmin):
+    list_display = ['group_number', 'description']
 
 
 admin.site.register(Person, PersonAdmin)
 admin.site.register(Residence_address)
 admin.site.register(Experience)
 admin.site.register(Education)
+admin.site.register(MailToAddress, MailToAddressAdmin)
+admin.site.register(MailToGroup, MailToGroupAdmin)

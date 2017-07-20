@@ -54,14 +54,6 @@
         }
       }
 
-
-      <!--function addEducation(){-->
-         <!--alert("123");-->
-
-      <!--}-->
-
-
-
       function addBlock(source, destination, forms_counter, init_forms){
 
           var currentcount = parseInt($(forms_counter).val());
@@ -73,16 +65,16 @@
               var current_name = $(this).attr("name");
 
               if (current_id) {
-                $(this).attr("id",  current_id.replace("0", currentcount+1));
+                $(this).attr("id",  current_id.replace("0", currentcount));
                 $(this).val("");
               }
 
               if (current_for) {
-                $(this).attr("for", current_for.replace("0", currentcount+1));
+                $(this).attr("for", current_for.replace("0", currentcount));
               }
 
               if (current_name) {
-                $(this).attr("name", current_name.replace("0", currentcount+1));
+                $(this).attr("name", current_name.replace("0", currentcount));
               }
 
           });
@@ -91,19 +83,103 @@
           $(init_forms).val(currentcount+1);
           $(destination).append(block);
 
+          link_start = $(block).find('input[id*=start_date]').attr('id');
+          link_end = $(block).find('input[id*=end_date]').attr('id');
+
+          if ($(block).attr('id')=="education_block"){
+            $(block).find('input[id*=edu_start]').datetimepicker({
+              format: "MM yyyy",
+              weekStart: 1,
+              startView: 4,
+              minView: 3,
+              language: "ru",
+              autoclose: true,
+              linkField: link_start,
+              linkFormat: "dd.mm.yyyy"
+             });
+            $(block).find('input[id*=edu_end]').datetimepicker({
+              format: "MM yyyy",
+              weekStart: 1,
+              startView: 4,
+              minView: 3,
+              language: "ru",
+              autoclose: true,
+              linkField: link_end,
+              linkFormat: "dd.mm.yyyy"
+             });
+          }
+          if ($(block).attr('id')=="exp_block"){
+            $(block).find('input[id*=exp_start]').datetimepicker({
+              format: "MM yyyy",
+              weekStart: 1,
+              startView: 4,
+              minView: 3,
+              language: "ru",
+              autoclose: true,
+              linkField: link_start,
+              linkFormat: "dd.mm.yyyy"
+             });
+            $(block).find('input[id*=exp_end]').datetimepicker({
+              format: "MM yyyy",
+              weekStart: 1,
+              startView: 4,
+              minView: 3,
+              language: "ru",
+              autoclose: true,
+              linkField: link_end,
+              linkFormat: "dd.mm.yyyy"
+             });
+          }
       }
 
 
       function addDateTimePicker(){
-        $('input[name*=start_date], input[name*=end_date]').datetimepicker({
+        link_edu_start = "id_education-0-start_date";
+        link_edu_end = "id_education-0-end_date";
+        $("#edu_start_0").datetimepicker({
           format: "MM yyyy",
           weekStart: 1,
           startView: 4,
           minView: 3,
           language: "ru",
-          autoclose: true
+          autoclose: true,
+          linkField: link_edu_start,
+          linkFormat: "dd.mm.yyyy"
+         });
+        $("#edu_end_0").datetimepicker({
+          format: "MM yyyy",
+          weekStart: 1,
+          startView: 4,
+          minView: 3,
+          language: "ru",
+          autoclose: true,
+          linkField: link_edu_end,
+          linkFormat: "dd.mm.yyyy"
+         });
+        link_exp_start = "id_expirience-0-exp_start_date";
+        link_exp_end = "id_expirience-0-exp_end_date";
+        $("#exp_start_0").datetimepicker({
+          format: "MM yyyy",
+          weekStart: 1,
+          startView: 4,
+          minView: 3,
+          language: "ru",
+          autoclose: true,
+          linkField: link_exp_start,
+          linkFormat: "dd.mm.yyyy"
+         });
+        $("#exp_end_0").datetimepicker({
+          format: "MM yyyy",
+          weekStart: 1,
+          startView: 4,
+          minView: 3,
+          language: "ru",
+          autoclose: true,
+          linkField: link_exp_end,
+          linkFormat: "dd.mm.yyyy"
          });
       }
+
 
 
       $(document).ready(function(){
@@ -132,7 +208,7 @@
             language: "ru",
             autoclose: true,
           });
-
+          $('#id_passp_date').prop('readonly', true);
 
           $('#id_start').datetimepicker({
             format: "dd.mm.yyyy",
@@ -143,7 +219,7 @@
             autoclose: true,
             startDate: new Date()
           });
-
+          $('#id_start').prop('readonly', true);
 
           $('#id_birthday').datetimepicker({
             format: "dd.mm.yyyy",
@@ -154,25 +230,24 @@
             autoclose: true,
             startDate: "-80y",
             endDate: "-14y",
-
           });
-
+          $('#id_birthday').prop('readonly', true);
 
 
           addDateTimePicker();
+          $('input[name*=start_date], input[name*=end_date]').prop('readonly', true);
+
 
           $("#add_education").click(function() {
-
             addBlock("#education_block", "#education_div", "#id_education-TOTAL_FORMS", "#id_education-INITIAL_FORMS");
-            addDateTimePicker();
+            $('input[name*=start_date], input[name*=end_date]').prop('readonly', true);
           });
 
 
 
           $("#add_exp").click(function() {
-
             addBlock("#exp_block", "#exp_div", "#id_expirience-TOTAL_FORMS", "#id_expirience-INITIAL_FORMS");
-            addDateTimePicker();
+            $('input[name*=start_date], input[name*=end_date]').prop('readonly', true);
           });
 
       });
@@ -198,9 +273,9 @@
   {% load bootstrap3 %}
 
 </div>
-  <form name="form1" action="{% url 'candidate:index' %}" method="post" autocomplete="off" id="mainForm">
+  <form name="form1" action="{% url 'candidate:index' mail_group=form.mail_to_group.value %}" method="post" autocomplete="off" id="mainForm">
      {% csrf_token %}
-
+      {{ form.mail_to_group }}
                 <div class="panel panel-primary">
                   <div class="panel-heading">Личные данные</div>
                   <div class="panel-body">
@@ -272,10 +347,26 @@
                         {% for form in edu_formset %}
                           {% if forloop.first %}
                             <fieldset id="education_block">
+                              <div class="form-group has-success">
+                                <label class="control-label">Начало обучения</label>
+                                <input class="form-control" id="edu_start_{{ forloop.counter0 }}" placeholder="Начало обучения" title="" readonly="" type="text">
+                              </div>
+                              <div class="form-group has-success">
+                                <label class="control-label">Окончание обучения</label>
+                                <input class="form-control" id="edu_end_{{ forloop.counter0 }}" placeholder="Окончание обучения" title="" readonly="" type="text">
+                              </div>
                                 {% bootstrap_form form %}
                                 <hr />
                             </fieldset>
                           {% else %}
+                            <div class="form-group has-success">
+                              <label class="control-label">Начало обучения</label>
+                              <input class="form-control" id="edu_start_{{ forloop.counter0 }}" placeholder="Начало обучения" title="" readonly="" type="text">
+                            </div>
+                            <div class="form-group has-success">
+                              <label class="control-label">Окончание обучения</label>
+                              <input class="form-control" id="edu_end_{{ forloop.counter0 }}" placeholder="Окончание обучения" title="" readonly="" type="text">
+                            </div>
                             {% bootstrap_form form %}
                             <hr />
                           {% endif %}
@@ -298,10 +389,26 @@
                         {% for form in exp_formset %}
                           {% if forloop.first %}
                             <fieldset id="exp_block">
+                              <div class="form-group has-success">
+                                <label class="control-label">Период работы с</label>
+                                <input class="form-control" id="exp_start_{{ forloop.counter0 }}" placeholder="Период работы с" title="" readonly="" type="text">
+                              </div>
+                              <div class="form-group has-success">
+                                <label class="control-label">Период работы по</label>
+                                <input class="form-control" id="exp_end_{{ forloop.counter0 }}" placeholder="Период работы по" title="" readonly="" type="text">
+                              </div>
                                 {% bootstrap_form form %}
                                 <hr />
                             </fieldset>
                           {% else %}
+                            <div class="form-group has-success">
+                              <label class="control-label">Период работы с</label>
+                              <input class="form-control" id="exp_start_{{ forloop.counter0 }}" placeholder="Период работы с" title="" readonly="" type="text">
+                            </div>
+                            <div class="form-group has-success">
+                              <label class="control-label">Период работы по</label>
+                              <input class="form-control" id="exp_end_{{ forloop.counter0 }}" placeholder="Период работы по" title="" readonly="" type="text">
+                            </div>
                             {% bootstrap_form form %}
                             <hr />
                           {% endif %}

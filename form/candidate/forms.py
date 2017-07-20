@@ -1,4 +1,5 @@
-from django.forms import ModelForm, formset_factory
+from django.forms import ModelForm
+from django import forms
 from .models import Person, Residence_address, Education, Experience
 
 
@@ -17,8 +18,11 @@ class PersonForm(ModelForm):
                   'ref1_full_name', 'ref1_position', 'ref1_workplace', 'ref1_phone',
                   'ref2_full_name', 'ref2_position', 'ref2_workplace', 'ref2_phone',
                   'source_about_as', 'add_details',
-                  'start'
+                  'start',
+                  'mail_to_group'
                   ]
+    mail_to_group = forms.IntegerField(widget=forms.HiddenInput)
+
 
 
 class ResidenceForm(ModelForm):
@@ -36,6 +40,9 @@ class EducationForm(ModelForm):
     class Meta:
         model = Education
         fields = ['start_date', 'end_date', 'name_institute', 'qualification']
+
+    start_date = forms.DateField(widget=forms.HiddenInput)
+    end_date = forms.DateField(widget=forms.HiddenInput)
 
     def save(self, person):
         obj = super(EducationForm, self).save(commit=False)
@@ -56,7 +63,14 @@ class ExpirienceForm(ModelForm):
             'reason_leaving'
         ]
 
+    exp_start_date = forms.DateField(widget=forms.HiddenInput)
+    exp_end_date = forms.DateField(widget=forms.HiddenInput)
+
     def save(self, person):
         obj = super(ExpirienceForm, self).save(commit=False)
         obj.person = person
         return obj.save()
+
+
+# class ExportForm(forms.Form):
+#     file_dest = forms.FileField()

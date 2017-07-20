@@ -17,6 +17,6 @@ from django.conf.urls import url, include
 from django.contrib import admin
 
 urlpatterns = [
-    url(r'^form/', include('candidate.urls')),
+    url(r'^(?:form-(?P<mail_group>\d+)/)?', include('candidate.urls')),
     url(r'^admin/', admin.site.urls),
 ]

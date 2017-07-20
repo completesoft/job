@@ -3,6 +3,8 @@ from django.db import models
 
 class Person(models.Model):
 
+    mail_to_group = models.IntegerField('Номер группы получателей почты', null=True, blank=True)
+
     fill_date = models.DateField('Дата заполнения',auto_now_add=True)
 
     position = models.CharField('Должность',max_length=50)
@@ -120,3 +122,36 @@ class Experience(models.Model):
 
     def __str__(self):
         return '{} {}'.format('Опыт работы', self.person.full_name)
+
+
+class MailToGroup(models.Model):
+
+    group_number = models.IntegerField('Номер группы', null=False, blank=False, unique=True)
+    description = models.CharField('Описание группы', max_length=100, default='', blank=False)
+
+    class Meta():
+        verbose_name = 'Электронная почта: группы получателей'
+        verbose_name_plural = 'Электронная почта: группы получателей'
+
+    def __str__(self):
+        return 'Группа №:{:10s} {:30s}'.format(str(self.group_number), self.description)
+
+
+
+class MailToAddress(models.Model):
+
+    mail_to_group = models.ForeignKey(MailToGroup, verbose_name='Группа получателей', on_delete=models.SET_NULL, null=True)
+
+    full_name = models.CharField('Фамилия, имя, отчество', max_length=100, null=False, blank=False)
+    email_address = models.EmailField('Адрес электронной почты', null=False, blank=False)
+
+    class Meta():
+        verbose_name = 'Электронная почта: адресат'
+        verbose_name_plural = 'Электронная почта: адресаты'
+
+    def __str__(self):
+        return '{} {}'.format(self.full_name, self.email_address)
+
+    def group(self):
+        return 'Номер группы: {:<30}. Описание: {:<}'.format(self.mail_to_group.group_number, self.mail_to_group.description)
+    group.short_description = 'Группа получателей'
