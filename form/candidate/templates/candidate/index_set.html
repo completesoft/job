@@ -30,29 +30,7 @@
 
 
     <script>
-      function fillDay(select_id){
-        for (var i = 1; i <= 31; i++) {
-          $(select_id).append('<option value="">' + i + '</option>');
-        }
-      }
 
-
-      function fillMonth(select_id){
-        var arr_Month = [
-          "Январь","Февраль","Март", "Апрель", "Май", "Июнь",
-          "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
-        for (var i = 0; i < 12; i++) {
-            $(select_id).append('<option value="">' + arr_Month[i] + '</option>');
-        }
-      }
-
-
-      function fillYear(select_id, min_age, max_age){
-        var current_year = (new Date).getFullYear();
-        for (var i = current_year - max_age; i <= current_year - min_age; i++) {
-          $(select_id).append('<option value="">' + i + '</option>');
-        }
-      }
 
       function addBlock(source, destination, forms_counter, init_forms){
 
@@ -183,9 +161,6 @@
 
 
       $(document).ready(function(){
-          fillDay("#birth_day");
-          fillMonth("#birth_month");
-          fillYear("#birth_year", 14, 75);
 
           $("#addr").hide();
 
@@ -207,6 +182,8 @@
             minView: 2,
             language: "ru",
             autoclose: true,
+            startDate: "-70y",
+            endDate: new Date(),
           });
           $('#id_passp_date').prop('readonly', true);
 
@@ -349,11 +326,11 @@
                             <fieldset id="education_block">
                               <div class="form-group has-success">
                                 <label class="control-label">Начало обучения</label>
-                                <input class="form-control" id="edu_start_{{ forloop.counter0 }}" placeholder="Начало обучения" title="" readonly="" type="text">
+                                <input class="form-control" id="edu_start_{{ forloop.counter0 }}" placeholder="Начало обучения" title="" readonly type="text">
                               </div>
                               <div class="form-group has-success">
                                 <label class="control-label">Окончание обучения</label>
-                                <input class="form-control" id="edu_end_{{ forloop.counter0 }}" placeholder="Окончание обучения" title="" readonly="" type="text">
+                                <input class="form-control" id="edu_end_{{ forloop.counter0 }}" placeholder="Окончание обучения" title="" readonly type="text">
                               </div>
                                 {% bootstrap_form form %}
                                 <hr />
@@ -361,11 +338,11 @@
                           {% else %}
                             <div class="form-group has-success">
                               <label class="control-label">Начало обучения</label>
-                              <input class="form-control" id="edu_start_{{ forloop.counter0 }}" placeholder="Начало обучения" title="" readonly="" type="text">
+                              <input class="form-control" id="edu_start_{{ forloop.counter0 }}" placeholder="Начало обучения" title="" readonly type="text">
                             </div>
                             <div class="form-group has-success">
                               <label class="control-label">Окончание обучения</label>
-                              <input class="form-control" id="edu_end_{{ forloop.counter0 }}" placeholder="Окончание обучения" title="" readonly="" type="text">
+                              <input class="form-control" id="edu_end_{{ forloop.counter0 }}" placeholder="Окончание обучения" title="" readonly type="text">
                             </div>
                             {% bootstrap_form form %}
                             <hr />
@@ -391,11 +368,11 @@
                             <fieldset id="exp_block">
                               <div class="form-group has-success">
                                 <label class="control-label">Период работы с</label>
-                                <input class="form-control" id="exp_start_{{ forloop.counter0 }}" placeholder="Период работы с" title="" readonly="" type="text">
+                                <input class="form-control" id="exp_start_{{ forloop.counter0 }}" placeholder="Период работы с" title="" readonly type="text">
                               </div>
                               <div class="form-group has-success">
                                 <label class="control-label">Период работы по</label>
-                                <input class="form-control" id="exp_end_{{ forloop.counter0 }}" placeholder="Период работы по" title="" readonly="" type="text">
+                                <input class="form-control" id="exp_end_{{ forloop.counter0 }}" placeholder="Период работы по" title="" readonly type="text">
                               </div>
                                 {% bootstrap_form form %}
                                 <hr />
@@ -403,11 +380,11 @@
                           {% else %}
                             <div class="form-group has-success">
                               <label class="control-label">Период работы с</label>
-                              <input class="form-control" id="exp_start_{{ forloop.counter0 }}" placeholder="Период работы с" title="" readonly="" type="text">
+                              <input class="form-control" id="exp_start_{{ forloop.counter0 }}" placeholder="Период работы с" title="" readonly type="text">
                             </div>
                             <div class="form-group has-success">
                               <label class="control-label">Период работы по</label>
-                              <input class="form-control" id="exp_end_{{ forloop.counter0 }}" placeholder="Период работы по" title="" readonly="" type="text">
+                              <input class="form-control" id="exp_end_{{ forloop.counter0 }}" placeholder="Период работы по" title="" readonly type="text">
                             </div>
                             {% bootstrap_form form %}
                             <hr />
