@@ -41,8 +41,8 @@ class EducationForm(ModelForm):
         model = Education
         fields = ['start_date', 'end_date', 'name_institute', 'qualification']
 
-    start_date = forms.DateField(widget=forms.HiddenInput)
-    end_date = forms.DateField(widget=forms.HiddenInput)
+    start_date = forms.DateField(widget=forms.HiddenInput, required=False)
+    end_date = forms.DateField(widget=forms.HiddenInput, required=False)
 
     def save(self, person):
         obj = super(EducationForm, self).save(commit=False)
@@ -63,8 +63,8 @@ class ExpirienceForm(ModelForm):
             'reason_leaving'
         ]
 
-    exp_start_date = forms.DateField(widget=forms.HiddenInput)
-    exp_end_date = forms.DateField(widget=forms.HiddenInput)
+    exp_start_date = forms.DateField(widget=forms.HiddenInput, required=False)
+    exp_end_date = forms.DateField(widget=forms.HiddenInput, required=False)
 
     def save(self, person):
         obj = super(ExpirienceForm, self).save(commit=False)

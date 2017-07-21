@@ -10,7 +10,7 @@ def export_to_xls(pers_obj):
     edu = pers_obj.education_set.all()
     exp = pers_obj.experience_set.all()
 
-    file_name = pers_obj.full_name + ".xls"
+    file_name = pers_obj.full_name + ".xlsx"
     buffer = BytesIO()
 
     workbook = xlsxwriter.Workbook(buffer)
