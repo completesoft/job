@@ -1,10 +1,11 @@
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect, Http404
-from .models import Person, Residence_address, Experience, Education, MailToAddress, MailToGroup
-from django.core.mail import EmailMessage
+from django.http import Http404
+from .models import Person, Residence_address, Experience, Education, MailToAddress, MailToGroup, MailBackSettings
+from django.core.mail import EmailMessage, get_connection
 from .forms import PersonForm, ResidenceForm, EducationForm, ExpirienceForm
 from django.forms import formset_factory
 from .support_function import export_to_xls
+
 
 def person(request, **kwargs):
     edu_prefix = 'education'
@@ -18,31 +19,25 @@ def person(request, **kwargs):
         ExpFormSet = formset_factory(ExpirienceForm, extra=0)
         exp_formset = ExpFormSet(request.POST, prefix=exp_prefix)
         if form.is_valid():
-            pers = form.save()
             if request.POST['residence']!='':
                 pass
-                # formRes.save(pers)
             if edu_formset.is_valid():
                 pass
-                # for form in edu_formset:
-                #     form.save(pers)
             if exp_formset.is_valid():
                 pass
-                # for form in exp_formset:
-                #     form.save(pers)
             pers = form.save()
             formRes.save(pers)
             for form in edu_formset:
-                print('EDUFORMA', form)
                 form.save(pers)
             for form in exp_formset:
                 form.save(pers)
-
             if emailSenderTwo(pers):
-                context = {'mail_group': pers.mail_to_group, 'email_send': True}
+                pers.email_send = True
+                pers.save()
+                context = {'mail_group': pers.mail_to_group, 'send': True}
             else:
-                context = {'mail_group': pers.mail_to_group, 'email_send': False}
-            return HttpResponseRedirect('thanks.html', context)
+                context = {'mail_group': pers.mail_to_group, 'send': False}
+            return render(request, 'candidate/thanks.html', context)
     else:
         try:
             email = MailToGroup.objects.get(group_number=kwargs['mail_group'])
@@ -60,23 +55,23 @@ def person(request, **kwargs):
     return render(request, 'candidate/index_set.html', {'form':form, 'formRes':formRes ,'edu_formset':edu_formset, 'exp_formset': exp_formset})
 
 
-def thanks(request, mail_group=None, email_send=True):
-    context = {'mail_group': mail_group, 'email_send': email_send}
-    return render(request, 'candidate/thanks.html', context)
-
-
 def emailSenderTwo(pers_obj):
     email = EmailMessage()
     email.subject = "Новая анкета!!! ФИО: {}. Должность: {}".format(pers_obj.full_name, pers_obj.position)
     email.body = "Бланк анкеты находится во вложении этого письма"
     email.from_email = "job@product.in.ua"
     email.to = [email.email_address for email in MailToGroup.objects.get(group_number = pers_obj.mail_to_group).mailtoaddress_set.all()]
-    print(email.to)
     data = export_to_xls(pers_obj)
     email.attach(filename=data[0], content=data[1], mimetype= data[2])
-    # email.send()
+    mail_back_settings = MailBackSettings.objects.get(pk=4)
+    email.connection = get_connection(
+        host=mail_back_settings.email_host,
+        port=mail_back_settings.email_port,
+        username=mail_back_settings.email_host_user,
+        password=mail_back_settings.email_host_password,
+        use_tls=mail_back_settings.email_use_tls)
     try:
-        email.send(fail_silently=True)
+        email.send(fail_silently=False)
         return True
     except Exception as e:
         return False

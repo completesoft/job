@@ -31,16 +31,11 @@ ALLOWED_HOSTS = ['*']
 
 # E-mail config
     #for testingw
-EMAIL_HOST = 'localhost'
-EMAIL_PORT = 2000
+# EMAIL_HOST = 'localhost'
+# EMAIL_PORT = 2000
     #for real email server
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# DEFAULT_FROM_EMAIL = 'user@domain.com'
-# EMAIL_USE_TLS = True
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_HOST_USER = 'user@domain.com'
-# EMAIL_HOST_PASSWORD = 'password'
-# EMAIL_PORT = 587
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
 
 
 # Application definition
@@ -141,4 +136,4 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = 'D:/XAMPP/htdocs/form/candidate/static/candidate'
+# STATIC_ROOT = 'D:/XAMPP/htdocs/form/candidate/static/candidate'

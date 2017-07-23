@@ -66,6 +66,8 @@ class Person(models.Model):
 
     start = models.DateField('Когда Вы можете начать работать', null=True, blank=True)
 
+    email_send = models.BooleanField('Анкета отправлена почтой', default=False, editable=False)
+
     class Meta():
         verbose_name = 'Соискатель'
         verbose_name_plural = 'Соискатели'
@@ -155,3 +157,19 @@ class MailToAddress(models.Model):
     def group(self):
         return 'Номер группы: {:<30}. Описание: {:<}'.format(self.mail_to_group.group_number, self.mail_to_group.description)
     group.short_description = 'Группа получателей'
+
+
+class MailBackSettings(models.Model):
+
+    email_host = models.CharField('EMAIL_HOST (сервер)', max_length=50, default='smtp.product.in.ua', blank=False)
+    email_host_user = models.EmailField('EMAIL_HOST_USER', max_length=50, default='job@product.in.ua', blank=False)
+    email_host_password = models.CharField('EMAIL_HOST_PASSWORD', max_length=50, default='A126YzSd6Kjm9At', blank=False)
+    email_port = models.IntegerField('EMAIL_PORT', default=587, blank=False)
+    email_use_tls = models.BooleanField('Использовать TLS', default=False, blank=False)
+
+    class Meta():
+        verbose_name = 'Настройки отправки почты'
+        verbose_name_plural = 'Настройки отправки почты'
+
+    def __str__(self):
+        return 'EMAIL_HOST (сервер):{}, EMAIL_HOST_USER:{}'.format(self.email_host, self.email_host_user)

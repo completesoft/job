@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.forms import Form
-from .models import Person, Residence_address, Experience, Education, MailToGroup, MailToAddress
+from .models import Person, Residence_address, Experience, Education, MailToGroup, MailToAddress, MailBackSettings
 from import_export import resources
 from import_export.admin import ExportActionModelAdmin, ImportExportModelAdmin, ImportMixin
 from django.conf.urls import url
@@ -8,15 +8,15 @@ import xlsxwriter
 from templated_docs.http import FileResponse
 import os.path
 from datetime import date
-from form.settings import EXPORT_DIR
+# from form.settings import EXPORT_DIR
 from django.http import HttpResponse
 from django.template.response import TemplateResponse
 from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponseRedirect
 
-class PersonResource(resources.ModelResource):
-    class Meta:
-        model = Person
+# class PersonResource(resources.ModelResource):
+#     class Meta:
+#         model = Person
 
 
 class ResidenceInline(admin.TabularInline):
@@ -38,11 +38,11 @@ class EducationInline(admin.TabularInline):
     extra = 0
 
 
-class PersonAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+class PersonAdmin(admin.ModelAdmin):
     inlines = [ResidenceInline, EducationInline, ExpirienceInline]
 
-    resource_class = PersonResource
-    list_display = ['full_name', 'fill_date', 'position', 'mail_to_group']
+    # resource_class = PersonResource
+    list_display = ['full_name', 'fill_date', 'position', 'mail_to_group', 'email_send']
     list_filter = ['fill_date', 'position']
     search_fields = ['full_name', 'position']
 
@@ -318,9 +318,14 @@ class MailToGroupAdmin(admin.ModelAdmin):
     list_display = ['group_number', 'description']
 
 
+class MailBackSettingsAdmin(admin.ModelAdmin):
+    list_display = ['id', 'email_host', 'email_host_user', 'email_use_tls', 'email_port']
+
+
 admin.site.register(Person, PersonAdmin)
 admin.site.register(Residence_address)
 admin.site.register(Experience)
 admin.site.register(Education)
 admin.site.register(MailToAddress, MailToAddressAdmin)
 admin.site.register(MailToGroup, MailToGroupAdmin)
+admin.site.register(MailBackSettings, MailBackSettingsAdmin)

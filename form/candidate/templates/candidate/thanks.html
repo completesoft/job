@@ -26,9 +26,15 @@
 
   <div class="container">
     <div class="jumbotron">
-      <h2 class="text-center">Спасибо</h2>
-      <hr class="my-4">
-      <p class="text-center">Наш менеджер по персоналу свяжется с Вами в ближайшее время.</p>
+      {% if send %}
+        <h2 class="text-center">Спасибо</h2>
+        <hr class="my-4">
+        <p class="text-center">Наш менеджер по персоналу свяжется с Вами в ближайшее время.</p>
+      {% else %}
+        <h2 class="text-center">Ошибка</h2>
+        <hr class="my-4">
+        <p class="text-center">Позвоните 103</p>
+      {% endif %}
       <p class="text-center"><a href="{% url 'candidate:index' mail_group=mail_group %}" class="btn btn-primary btn-lg" role="button">Заполнить анкету</a></p>
     </div>
   </div>
