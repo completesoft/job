@@ -178,7 +178,7 @@ def emailSenderTwo(pers_obj):
     email.to = [email.email_address for email in MailToGroup.objects.get(group_number = pers_obj.mail_to_group).mailtoaddress_set.all()]
     data = export_to_xls(pers_obj)
     email.attach(filename=data[0], content=data[1], mimetype= data[2])
-    mail_back_settings = MailBackSettings.objects.get(pk=4)
+    mail_back_settings = MailToGroup.objects.get(group_number = pers_obj.mail_to_group).mail_back_settings
     email.connection = get_connection(
         host=mail_back_settings.email_host,
         port=mail_back_settings.email_port,

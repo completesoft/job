@@ -126,8 +126,27 @@ class Experience(models.Model):
         return '{} {}'.format('Опыт работы', self.person.full_name)
 
 
+
+class MailBackSettings(models.Model):
+
+    email_host = models.CharField('EMAIL_HOST (сервер)', max_length=50, default='smtp.product.in.ua', blank=False)
+    email_host_user = models.EmailField('EMAIL_HOST_USER', max_length=50, default='job@product.in.ua', blank=False)
+    email_host_password = models.CharField('EMAIL_HOST_PASSWORD', max_length=50, default='A126YzSd6Kjm9At', blank=False)
+    email_port = models.IntegerField('EMAIL_PORT', default=587, blank=False)
+    email_use_tls = models.BooleanField('Использовать TLS', default=False, blank=False)
+    description = models.CharField('Описание настроек отправки почты', max_length=100, default='', blank=True)
+
+    class Meta():
+        verbose_name = 'Настройки отправки почты'
+        verbose_name_plural = 'Настройки отправки почты'
+
+    def __str__(self):
+        return 'EMAIL_HOST (сервер):{}, EMAIL_HOST_USER:{}'.format(self.email_host, self.email_host_user)
+
+
 class MailToGroup(models.Model):
 
+    mail_back_settings = models.ForeignKey(MailBackSettings, verbose_name='Настройки отправки почты', on_delete=models.PROTECT, blank=False)
     group_number = models.IntegerField('Номер группы', null=False, blank=False, unique=True)
     description = models.CharField('Описание группы', max_length=100, default='', blank=False)
 
@@ -159,17 +178,3 @@ class MailToAddress(models.Model):
     group.short_description = 'Группа получателей'
 
 
-class MailBackSettings(models.Model):
-
-    email_host = models.CharField('EMAIL_HOST (сервер)', max_length=50, default='smtp.product.in.ua', blank=False)
-    email_host_user = models.EmailField('EMAIL_HOST_USER', max_length=50, default='job@product.in.ua', blank=False)
-    email_host_password = models.CharField('EMAIL_HOST_PASSWORD', max_length=50, default='A126YzSd6Kjm9At', blank=False)
-    email_port = models.IntegerField('EMAIL_PORT', default=587, blank=False)
-    email_use_tls = models.BooleanField('Использовать TLS', default=False, blank=False)
-
-    class Meta():
-        verbose_name = 'Настройки отправки почты'
-        verbose_name_plural = 'Настройки отправки почты'
-
-    def __str__(self):
-        return 'EMAIL_HOST (сервер):{}, EMAIL_HOST_USER:{}'.format(self.email_host, self.email_host_user)
