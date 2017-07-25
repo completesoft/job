@@ -10,8 +10,9 @@
     <link rel="icon" href="favicon.ico">
 
     <title>Анкета кандидата</title>
-
     <script type="text/javascript" src="{% static 'candidate/js/jquery.js' %}"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.js"></script>
+
     <link href="{% static 'candidate/css/bootstrap.min.css' %}" rel="stylesheet">
     <link href="{% static 'candidate/css/bootstrap-datetimepicker.min.css' %}" rel="stylesheet">
 
@@ -227,6 +228,47 @@
             $('input[name*=start_date], input[name*=end_date]').prop('readonly', true);
           });
 
+
+
+          <!--$("#sub_button").click(function(e){-->
+            <!--&lt;!&ndash;e.preventDefault();&ndash;&gt;-->
+            <!--var validator = $("#mainForm").validate();-->
+            <!--if (validator){-->
+              <!--$.ajax({type: "GET", url: "/form-0/check",-->
+                <!--success: function (data, text) {-->
+                  <!--console.log(text, '###', data);-->
+                  <!--console.log(this);-->
+                  <!--console.log(e);-->
+                  <!--$("#mainForm").submit();-->
+                  <!--return false;-->
+                <!--},-->
+                <!--error: function (request, status, error) {-->
+                  <!--console.log(error, request);-->
+                  <!--alert('Не связи с сервером');-->
+                <!--}-->
+              <!--});-->
+            <!--}-->
+          <!--});-->
+
+
+          <!--$("#mainForm").submit(function(e){-->
+            <!--e.preventDefault();-->
+            <!--var validator = $("#mainForm").validate();-->
+            <!--if (validator){-->
+              <!--$.ajax({type: "GET", url: "/form-0/check",-->
+                <!--success: function (data, text) {-->
+                  <!--console.log(text, '###', data);-->
+                  <!--console.log(this);-->
+                  <!--console.log(e);-->
+                  <!--$(this).submit();-->
+                <!--},-->
+                <!--error: function (request, status, error) {-->
+                  <!--console.log(error, request);-->
+                  <!--alert('Не связи с сервером');-->
+                <!--}-->
+              <!--});-->
+            <!--}-->
+          <!--});-->
       });
     </script>
   </head>
