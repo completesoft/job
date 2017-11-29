@@ -1,6 +1,7 @@
 from django.forms import ModelForm
 from django import forms
 from .models import Person, Residence_address, Education, Experience
+from django.contrib.auth.models import User
 
 
 class PersonForm(ModelForm):
@@ -19,9 +20,8 @@ class PersonForm(ModelForm):
                   'ref2_full_name', 'ref2_position', 'ref2_workplace', 'ref2_phone',
                   'source_about_as', 'add_details',
                   'start',
-                  'mail_to_group'
                   ]
-    mail_to_group = forms.IntegerField(widget=forms.HiddenInput)
+
 
 
 
@@ -71,6 +71,3 @@ class ExpirienceForm(ModelForm):
         obj.person = person
         return obj.save()
 
-
-# class ExportForm(forms.Form):
-#     file_dest = forms.FileField()

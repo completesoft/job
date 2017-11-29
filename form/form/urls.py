@@ -15,8 +15,9 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
+from django.contrib.auth.views import login, logout_then_login
 
 urlpatterns = [
-    url(r'^(?:form-(?P<mail_group>\d+)/)?', include('candidate.urls')),
+    url(r'^cv/', include('candidate.urls')),
     url(r'^admin/', admin.site.urls),
 ]

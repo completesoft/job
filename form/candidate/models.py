@@ -1,10 +1,10 @@
 from django.db import models
+from django.db.models.signals import post_save
+from django.contrib.auth.models import User
+from django.dispatch import receiver
 
 
 class Person(models.Model):
-
-    mail_to_group = models.IntegerField('Номер группы получателей почты', null=True, blank=True)
-
     fill_date = models.DateField('Дата заполнения',auto_now_add=True)
 
     position = models.CharField('Должность',max_length=50)
@@ -32,7 +32,7 @@ class Person(models.Model):
     quant_children_set = (
         (0, 0), (1, 1), (2, 2), (3, 3), (4, 4), (5, 5), (6, 6), (7, 7),
     )
-    quant_children = models.IntegerField('Количество детей', choices=quant_children_set, default='0')
+    quant_children = models.IntegerField('Количество детей', choices=quant_children_set, default=0)
 
     passp_number = models.CharField('Серия, номер паспорта',max_length=20, default='', blank=True)
     passp_issue = models.CharField('Кем выдан',max_length=255, default='', blank=True)
@@ -135,6 +135,7 @@ class MailBackSettings(models.Model):
     email_port = models.IntegerField('EMAIL_PORT', default=587, blank=False)
     email_use_tls = models.BooleanField('Использовать TLS', default=False, blank=False)
     description = models.CharField('Описание настроек отправки почты', max_length=100, default='', blank=True)
+    default = models.BooleanField('Использовать по умоланию', default=False)
 
     class Meta():
         verbose_name = 'Настройки отправки почты'
@@ -144,37 +145,26 @@ class MailBackSettings(models.Model):
         return 'EMAIL_HOST (сервер):{}, EMAIL_HOST_USER:{}'.format(self.email_host, self.email_host_user)
 
 
-class MailToGroup(models.Model):
-
-    mail_back_settings = models.ForeignKey(MailBackSettings, verbose_name='Настройки отправки почты', on_delete=models.PROTECT, blank=False)
-    group_number = models.IntegerField('Номер группы', null=False, blank=False, unique=True)
-    description = models.CharField('Описание группы', max_length=100, default='', blank=False)
-
-    class Meta():
-        verbose_name = 'Электронная почта: группы получателей'
-        verbose_name_plural = 'Электронная почта: группы получателей'
-
-    def __str__(self):
-        return 'Группа №:{:10s} {:30s}'.format(str(self.group_number), self.description)
-
-
-
 class MailToAddress(models.Model):
-
-    mail_to_group = models.ForeignKey(MailToGroup, verbose_name='Группа получателей', on_delete=models.SET_NULL, null=True)
-
     full_name = models.CharField('Фамилия, имя, отчество', max_length=100, null=False, blank=False)
     email_address = models.EmailField('Адрес электронной почты', null=False, blank=False)
 
     class Meta():
-        verbose_name = 'Электронная почта: адресат'
-        verbose_name_plural = 'Электронная почта: адресаты'
+        verbose_name = 'Адресат'
+        verbose_name_plural = 'Адресаты'
 
     def __str__(self):
         return '{} {}'.format(self.full_name, self.email_address)
 
-    def group(self):
-        return 'Номер группы: {:<30}. Описание: {:<}'.format(self.mail_to_group.group_number, self.mail_to_group.description)
-    group.short_description = 'Группа получателей'
 
+class Location(models.Model):
+    loc_id = models.CharField('Идентификатор', max_length=20, null=False, blank=False)
+    describe = models.CharField('Наименование', max_length=100, null=True, blank=True, default='')
+    mail_to = models.ManyToManyField(MailToAddress, verbose_name='Получатели почты', related_name='locations')
 
+    class Meta():
+        verbose_name = 'АРМ анкетирования'
+        verbose_name_plural = 'АРМ анкетирования'
+
+    def __str__(self):
+        return '{} {}'.format(self.loc_id, self.describe)

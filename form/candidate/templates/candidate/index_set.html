@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="favicon.ico">
+    <link rel="icon" href="{% static 'candidate/image/info.png' %}">
 
     <title>Анкета кандидата</title>
     <script type="text/javascript" src="{% static 'candidate/js/jquery.js' %}"></script>
@@ -285,6 +285,9 @@
       нашем кадровом банке, и мы обязательно свяжемся с Вами, если увидим в Вас
        потенциального кандидата на конкретную вакансию.
     </p>
+    <p>{{ form.errors }}</p>
+    <p>{{ form.non_form_errors }}</p>
+    <p></p>
   </div>
 
 <div class="row">
@@ -292,7 +295,7 @@
   {% load bootstrap3 %}
 
 </div>
-  <form name="form1" action="{% url 'candidate:index' mail_group=form.mail_to_group.value %}" method="post" autocomplete="off" id="mainForm">
+  <form name="form1" action="{% url 'candidate:index' loc_id=loc_id %}" method="post" autocomplete="off" id="mainForm">
      {% csrf_token %}
       {{ form.mail_to_group }}
                 <div class="panel panel-primary">

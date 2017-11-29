@@ -1,8 +1,10 @@
-from .models import Person, Residence_address, Experience, Education, MailToAddress, MailToGroup, MailBackSettings
+from .models import Person, Residence_address, Experience, Education, MailToAddress, MailBackSettings, Location
 from datetime import date
 import xlsxwriter
 from io import BytesIO
 from django.core.mail import EmailMessage, get_connection
+import openpyxl
+import os
 
 # create from Person model xlsx form
 def export_to_xls(pers_obj):
@@ -15,7 +17,7 @@ def export_to_xls(pers_obj):
     buffer = BytesIO()
 
     workbook = xlsxwriter.Workbook(buffer)
-    ws = workbook.add_worksheet(pers_obj.full_name)
+    ws = workbook.add_worksheet(pers_obj.full_name[:28])
     ws.set_portrait()
     ws.set_paper(9)
     ws.set_footer('&C &P из &N стр.')
@@ -170,15 +172,17 @@ def translateBool(boolVar):
     return tmp
 
 
-def emailSenderTwo(pers_obj):
+def emailSenderTwo(mail_to, pers_obj):
     email = EmailMessage()
     email.subject = "Новая анкета!!! ФИО: {}. Должность: {}".format(pers_obj.full_name, pers_obj.position)
     email.body = "Бланк анкеты находится во вложении этого письма"
     email.from_email = "job@product.in.ua"
-    email.to = [email.email_address for email in MailToGroup.objects.get(group_number = pers_obj.mail_to_group).mailtoaddress_set.all()]
+    email.to = mail_to
     data = export_to_xls(pers_obj)
     email.attach(filename=data[0], content=data[1], mimetype= data[2])
-    mail_back_settings = MailToGroup.objects.get(group_number = pers_obj.mail_to_group).mail_back_settings
+    mail_back_settings = MailBackSettings.objects.filter(default=True).first()
+    if mail_back_settings is None:
+        return False
     email.connection = get_connection(
         host=mail_back_settings.email_host,
         port=mail_back_settings.email_port,
@@ -189,4 +193,5 @@ def emailSenderTwo(pers_obj):
         email.send(fail_silently=False)
         return True
     except Exception as e:
+        print(e)
         return False
