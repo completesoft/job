@@ -236,8 +236,10 @@ class MailToAddressAdmin(admin.ModelAdmin):
 class MailBackSettingsAdmin(admin.ModelAdmin):
     list_display = ['id', 'email_host', 'email_host_user', 'email_use_tls', 'email_port', 'default']
 
+class LocationAdmin(admin.ModelAdmin):
+    filter_horizontal =['mail_to']
 
-admin.site.register(Location)
+admin.site.register(Location, LocationAdmin)
 admin.site.register(Person, PersonAdmin)
 admin.site.register(Residence_address)
 admin.site.register(Experience)
