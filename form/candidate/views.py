@@ -8,8 +8,12 @@ from .support_function import emailSenderTwo
 from django.views.generic import CreateView
 from django.contrib.auth.decorators import login_required
 
-@login_required()
+
 def person(request, loc_id):
+    try:
+        location = Location.objects.get(loc_id=loc_id)
+    except Location.DoesNotExist:
+        raise Http404
     edu_prefix = 'education'
     exp_prefix = 'expirience'
     if request.method == 'POST':
@@ -30,7 +34,7 @@ def person(request, loc_id):
             for form in exp_formset:
                 if form.has_changed():
                     form.save(pers)
-            location = Location.objects.get(loc_id=loc_id)
+            # location = Location.objects.get(loc_id=loc_id)
             mail_to = [email.email_address for email in location.mail_to.all()]
             if mail_to:
                 mail = emailSenderTwo(mail_to, pers)
