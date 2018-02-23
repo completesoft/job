@@ -18,6 +18,9 @@ from django.contrib import admin
 from django.contrib.auth.views import login, logout_then_login
 
 urlpatterns = [
-    url(r'^(?P<loc_id>form-\d+)/', include('candidate.urls')),
+    url(r'^login/', login, {'template_name': 'login_form.html'}, name="login"),
+    url(r'^logout/', logout_then_login, name="logout"),
+    url(r'^form-(?P<loc_id>\d+)/', include('candidate.urls')),
+    url(r'^vcmanage/', include('vc_manager.urls')),
     url(r'^admin/', admin.site.urls),
 ]

@@ -1,27 +1,11 @@
 from django.contrib import admin
-from django.forms import Form
 from .models import Person, Residence_address, Experience, Education, MailToAddress, MailBackSettings, Location
-from import_export import resources
-from import_export.admin import ExportActionModelAdmin, ImportExportModelAdmin, ImportMixin
-from django.conf.urls import url
-import xlsxwriter
-from templated_docs.http import FileResponse
-import os.path
-from datetime import date
-# from form.settings import EXPORT_DIR
-from django.http import HttpResponse
-from django.template.response import TemplateResponse
-from django.contrib.contenttypes.models import ContentType
-from django.http import HttpResponseRedirect
-
-class PersonResource(resources.ModelResource):
-    class Meta:
-        model = Person
 
 
 class ResidenceInline(admin.TabularInline):
     model = Residence_address
     extra = 0
+
 
 class ExpirienceInline(admin.StackedInline):
     model = Experience
@@ -38,10 +22,10 @@ class EducationInline(admin.TabularInline):
     extra = 0
 
 
-class PersonAdmin(ImportExportModelAdmin):
+class PersonAdmin(admin.ModelAdmin):
     inlines = [ResidenceInline, EducationInline, ExpirienceInline]
 
-    resource_class = PersonResource
+    # resource_class = PersonResource
     list_display = ['full_name', 'fill_date', 'position', 'email_send']
     list_filter = ['fill_date', 'position']
     search_fields = ['full_name', 'position']

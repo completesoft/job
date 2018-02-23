@@ -75,6 +75,10 @@ class Person(models.Model):
     def __str__(self):
         return '{} : {}'.format(self.full_name, self.position)
 
+    def last_state(self):
+        state = self.vcstate_set.all().latest()
+        return state.status.get_status_display()
+    last_state.short_description = 'Статус анкеты'
 
 
 class Residence_address(models.Model):

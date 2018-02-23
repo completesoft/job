@@ -41,14 +41,13 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # Application definition
 INSTALLED_APPS = [
     'candidate.apps.CandidateConfig',
+    'vc_manager.apps.VcManagerConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'import_export',
-    'templated_docs',
     'bootstrap3',
 ]
 
@@ -68,7 +67,7 @@ ROOT_URLCONF = 'form.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates'),],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -141,4 +140,4 @@ LOGIN_URL = '/login/'
 
 LOGOUT_URL = '/logout/'
 
-LOGIN_REDIRECT_URL = '/form/'
+LOGIN_REDIRECT_URL = '/vcmanage/'

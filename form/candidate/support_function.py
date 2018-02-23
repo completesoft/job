@@ -3,7 +3,7 @@ from datetime import date
 import xlsxwriter
 from io import BytesIO
 from django.core.mail import EmailMessage, get_connection
-import openpyxl
+# import openpyxl
 import os
 
 # create from Person model xlsx form
