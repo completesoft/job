@@ -25,7 +25,7 @@ def person(request, loc_id):
         ExpFormSet = formset_factory(ExpirienceForm, extra=0)
         exp_formset = ExpFormSet(request.POST, prefix=exp_prefix)
         if form.is_valid() and formRes.is_valid() and exp_formset.is_valid() and edu_formset.is_valid():
-            pers = form.save()
+            pers = form.save(location)
             if formRes.has_changed():
                 formRes.save(pers)
             for form in edu_formset:
@@ -34,7 +34,6 @@ def person(request, loc_id):
             for form in exp_formset:
                 if form.has_changed():
                     form.save(pers)
-            # location = Location.objects.get(loc_id=loc_id)
             mail_to = [email.email_address for email in location.mail_to.all()]
             if mail_to:
                 mail = emailSenderTwo(mail_to, pers)

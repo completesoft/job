@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load staticfiles %}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="{% static 'vc_manager/image/logo.png' %}">
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'candidate/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'cv_manager/css/dashboard.css' %}" rel="stylesheet">
+    {% block other_css %}{% endblock %}
+    <title>Менеджер анкет</title>
+</head>
+<body>
+  <div class="row">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#"><img style="	width: 28px;" src="{% static 'cv_manager/img/logo.png' %}" alt="Complete-service"></a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            {% block top_menu %}{% endblock %}
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </div>
+    <div class="container">
+      <div class="row">
+          <div class="col-md-3 sidebar">
+            {% block sidebar %}{% endblock %}
+          </div>
+
+          <div class="col-md-offset-3 col-md-9 main">
+          {% block sub_header %}{% endblock %}
+
+          {% block table_main %}{% endblock %}
+          </div>
+      </div>
+    </div>
+<script type="text/javascript" src="{% static 'candidate/js/jquery.js' %}"></script>
+<script src="{% static 'candidate/js/bootstrap.min.js' %}"></script>
+{% block script_block %}{% endblock %}
+</body>
+</html>

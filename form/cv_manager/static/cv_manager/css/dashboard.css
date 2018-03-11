@@ -1,0 +1,58 @@
+/*
+ * Base structure
+ */
+
+/* Move down content because we have a fixed navbar that is 50px tall */
+body {
+  padding-top: 60px;
+}
+
+.sub-header {
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+
+.sidebar {
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+    display: block;
+    padding: 10px;
+    overflow-x: hidden;
+    overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+    background-color: #f5f5f5;
+    border-right: 1px solid #eee;
+    position: fixed;
+    top: 51px;
+}
+
+
+.main_panel {
+    justify-content: flex-end;
+    margin-left: 10px;
+}
+
+ul.double {
+    columns: 2;
+    -webkit-columns: 2;
+    -moz-columns: 2;
+    list-style-type: none;
+}
+
+ul.double>li {
+    padding-bottom: 5px;
+}
+
+ul.no_marker{
+  list-style-type: none;
+  margin-top: 10px;
+}
+
+li.main_li {
+    margin-top: 15px;
+}
+
+div.first {
+    margin-top: 20px;
+}

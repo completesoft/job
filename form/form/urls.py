@@ -21,6 +21,6 @@ urlpatterns = [
     url(r'^login/', login, {'template_name': 'login_form.html'}, name="login"),
     url(r'^logout/', logout_then_login, name="logout"),
     url(r'^form-(?P<loc_id>\d+)/', include('candidate.urls')),
-    url(r'^vcmanage/', include('vc_manager.urls')),
+    url(r'^cvmanage/', include('cv_manager.urls')),
     url(r'^admin/', admin.site.urls),
 ]

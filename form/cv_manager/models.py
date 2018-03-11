@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-class VcStatusName(models.Model):
+class CvStatusName(models.Model):
     status_name_set = (
         (0, 'Новое'),
         (1, 'Просмотренное'),
@@ -23,10 +23,10 @@ class VcStatusName(models.Model):
 
 
 
-class VcState(models.Model):
+class CvState(models.Model):
     date = models.DateTimeField('Дата создания', auto_now_add=True)
-    vc = models.ForeignKey('candidate.Person', verbose_name='ID Person', on_delete=models.CASCADE)
-    status = models.ForeignKey(VcStatusName, verbose_name='Статус', on_delete=models.SET_NULL, null=True)
+    cv = models.ForeignKey('candidate.Person', verbose_name='ID Person', on_delete=models.CASCADE)
+    status = models.ForeignKey(CvStatusName, verbose_name='Статус', on_delete=models.SET_NULL, null=True)
     user_set = models.ForeignKey(User, related_name='setter', verbose_name='Установил статус', on_delete=models.SET_NULL, blank=True, null=True)
     user_responsible = models.ForeignKey(User, related_name='getter', verbose_name='Кому назначено', on_delete=models.SET_NULL, blank=True, null=True)
     comment = models.TextField('Комментарий', max_length=200, default='', blank=False, null=True)
@@ -37,12 +37,14 @@ class VcState(models.Model):
         get_latest_by = "date"
 
     def __str__(self):
-        return "{} - {}".format(self.vc.full_name, self.vc.position)
+        return "{} - {}".format(self.cv.full_name, self.cv.position)
 
     def full_name(self):
-        return self.vc.full_name
+        return self.cv.full_name
     full_name.short_description = 'ФИО'
 
     def position(self):
-        return self.vc.position
+        return self.cv.position
     full_name.short_description = 'Должность'
+
+

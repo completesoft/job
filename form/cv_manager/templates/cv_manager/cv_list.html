@@ -1,0 +1,85 @@
+{% extends "cv_manager/base.html" %}
+{% load staticfiles %}
+
+{% block sidebar %}
+        <h4 class="sub-header">Фильтры:</h4>
+         <form action="{% url 'cv_manager:cv_list' %}" autocomplete="off">
+
+            <h5>Дата заполнения:</h5>
+              <div class="form-group">
+                <p>
+                <label for='{{filter.date_at.id_for_label}}'>{{filter.date_at.label}}:{{filter.date_at.errors}}</label>
+                  {{ filter.date_at }}
+                </p>
+                  <p>
+                <label for='{{filter.date_to.id_for_label}}'>{{filter.date_to.label}}:{{filter.date_to.errors}}</label>
+                  {{ filter.date_to }}
+                </p>
+              </div>
+
+              <div class="form-group">
+                <label for='{{filter.position.id_for_label}}'>{{filter.position.label}}:{{filter.position.errors}}</label>
+
+                  {{ filter.position }}
+
+              </div>
+              <div class="form-group">
+                <label for='{{filter.full_name.id_for_label}}'>{{filter.full_name.label}}:{{filter.full_name.errors}}</label>
+
+                    {{ filter.full_name }}
+
+              </div>
+              <div class="form-group">
+                <label for='{{filter.cv_state.id_for_label}}'>{{filter.cv_state.label}}:{{filter.cv_state.errors}}</label>
+
+                  {{ filter.cv_state }}
+
+              </div>
+              <div class="form-group">
+
+                  <button type="submit" class="btn btn-primary">Показать</button>
+
+              </div>
+         </form>
+{% endblock %}
+
+
+{% block table_main %}
+        <div class="panel panel-primary main_panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">БАЗА РЕЗЮМЕ</h3>
+            </div>
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped" id="cv_table">
+                        <thead>
+                          <th>Дата заполнения</th>
+                          <th>ФИО</th>
+                          <th>Должность</th>
+                          <th>Телефон</th>
+                          <th>Место заполнения</th>
+                          <th>Статус резюме</th>
+                          <th>Редактирование</th>
+                        </thead>
+                        <tbody>
+                          {% for person in persons %}
+                          <tr>
+                            <td>{{ person.fill_date|date:"d.m.Y" }}</td>
+                            <td><a href="{% url 'cv_manager:cv_detail' person_id=person.id %}">{{ person.full_name }}</a></td>
+                            <td>{{ person.position }}</td>
+                            <td>{{ person.phone }}</td>
+                            <td>{{ person.fill_location.describe }}</td>
+                            <td>{{ person.last_state }}</td>
+                            <td><a href="{% url 'cv_manager:cv_update' person_id=person.id %}"><img style="	width: 28px;" src="{% static 'cv_manager/img/edit.png' %}" alt="Редактировать"></a></td>
+                          </tr>
+                          {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+{% endblock %}
+
+
+{% block script_block %}
+{% endblock %}

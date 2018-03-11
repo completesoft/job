@@ -26,13 +26,13 @@ class PersonAdmin(admin.ModelAdmin):
     inlines = [ResidenceInline, EducationInline, ExpirienceInline]
 
     # resource_class = PersonResource
-    list_display = ['full_name', 'fill_date', 'position', 'email_send']
+    list_display = ['full_name', 'fill_date', 'position', 'email_send', 'fill_location']
     list_filter = ['fill_date', 'position']
     search_fields = ['full_name', 'position']
 
 
     fieldsets = [
-        ('Личные данные:', {'fields':['start',('position', 'full_name', 'birthday'), 'gender', 'registration', 'residenceBool']}),
+        ('Личные данные:', {'fields':[('start', 'fill_location', 'source_about_as'), ('position', 'full_name', 'birthday'), 'gender', 'registration', 'residenceBool']}),
         ('Контакты:',{'fields':['phone']}),
         ('Семья:', {'fields': [('civil_status', 'quant_children')]}),
         ('Паспортные данные:', {'fields': ['passp_number', 'passp_issue', 'passp_date']}),

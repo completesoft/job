@@ -5,6 +5,8 @@ from django.dispatch import receiver
 
 
 class Person(models.Model):
+    fill_location = models.ForeignKey('Location', verbose_name='Место заполнения', null=True, blank=True)
+
     fill_date = models.DateField('Дата заполнения',auto_now_add=True)
 
     position = models.CharField('Должность',max_length=50)
@@ -68,6 +70,7 @@ class Person(models.Model):
 
     email_send = models.BooleanField('Анкета отправлена почтой', default=False, editable=False)
 
+
     class Meta():
         verbose_name = 'Соискатель'
         verbose_name_plural = 'Соискатели'
@@ -76,10 +79,13 @@ class Person(models.Model):
         return '{} : {}'.format(self.full_name, self.position)
 
     def last_state(self):
-        state = self.vcstate_set.all().latest()
+        state = self.cvstate_set.all().latest()
         return state.status.get_status_display()
     last_state.short_description = 'Статус анкеты'
 
+    def cv_state(self):
+        state = self.cvstate_set.all().latest()
+        return state
 
 class Residence_address(models.Model):
 

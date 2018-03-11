@@ -22,6 +22,12 @@ class PersonForm(ModelForm):
                   'start',
                   ]
 
+    def save(self, location):
+        person = super(PersonForm, self).save()
+        person.fill_location = location
+        person.save()
+        return person
+
 
 
 

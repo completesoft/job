@@ -41,7 +41,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # Application definition
 INSTALLED_APPS = [
     'candidate.apps.CandidateConfig',
-    'vc_manager.apps.VcManagerConfig',
+    'cv_manager.apps.CvManagerConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -140,4 +140,4 @@ LOGIN_URL = '/login/'
 
 LOGOUT_URL = '/logout/'
 
-LOGIN_REDIRECT_URL = '/vcmanage/'
+LOGIN_REDIRECT_URL = '/cvmanage/'
