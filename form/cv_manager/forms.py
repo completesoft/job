@@ -1,5 +1,7 @@
 from django import forms
 from .models import CvStatusName
+from candidate.forms import PersonForm, EducationForm, ExpirienceForm, ResidenceForm
+from django.forms import ModelForm
 
 
 class FilterCvListForm(forms.Form):
@@ -26,3 +28,31 @@ class FilterCvListForm(forms.Form):
         args = {k:self.cleaned_data[v] for k, v in preset.items() if v in self.changed_data and v in self.cleaned_data}
         return args
 
+
+class CvPersonForm(PersonForm):
+
+    def save(self, **kwargs):
+        return ModelForm.save(self, **kwargs)
+
+
+class CvEducationForm(EducationForm):
+    pass
+
+    def save(self, **kwargs):
+        return ModelForm.save(self, **kwargs)
+
+
+class CvExperienceForm(ExpirienceForm):
+    pass
+
+    def save(self, **kwargs):
+        return ModelForm.save(self, **kwargs)
+
+
+class CvResidenceForm(ResidenceForm):
+
+    def save(self, *args, **kwargs):
+        return super(CvResidenceForm, self).save(*args, **kwargs)
+
+    def save_init(self):
+        return ModelForm.save(self)

@@ -114,7 +114,7 @@
               {%else%}<span class="glyphicon glyphicon-remove"></span>{%endif%}</li>
           <li>Водительское удостоверение {% if person.driver_lic %}<span class="glyphicon glyphicon-ok"></span>
               {%else%}<span class="glyphicon glyphicon-remove"></span>{%endif%}</li>
-          <li>Хронические заболивания {% if person.driver_lic %}<span class="glyphicon glyphicon-ok"></span>
+          <li>Хронические заболевания {% if person.driver_lic %}<span class="glyphicon glyphicon-ok"></span>
               {%else%}<span class="glyphicon glyphicon-remove"></span>{%endif%}</li>
           <li {% if person.convicted %}class="text-danger text-uppercase"{% endif %}>Уголовная ответственность
               {% if person.convicted %}<span class="glyphicon glyphicon-ok"></span>

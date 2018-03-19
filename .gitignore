@@ -97,3 +97,12 @@ ENV/
 
 # mypy
 .mypy_cache/
+form/\.idea/workspace\.xml
+
+form/\.idea/misc\.xml
+
+\.idea/workspace\.xml
+
+\.idea/misc\.xml
+
+\.idea/job\.iml

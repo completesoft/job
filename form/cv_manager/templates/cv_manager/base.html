@@ -8,9 +8,11 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="{% static 'vc_manager/image/logo.png' %}">
+    <link rel="icon" href="{% static 'cv_manager/img/logo.png' %}">
 
     <!-- Bootstrap core CSS -->
+
+    <link href="{% static 'candidate/css/bootstrap-datetimepicker.min.css' %}" rel="stylesheet">
     <link href="{% static 'candidate/css/bootstrap.min.css' %}" rel="stylesheet">
     <link href="{% static 'cv_manager/css/dashboard.css' %}" rel="stylesheet">
     {% block other_css %}{% endblock %}
@@ -37,7 +39,7 @@
       </div>
     </nav>
   </div>
-    <div class="container">
+    <div class="container-fluid">
       <div class="row">
           <div class="col-md-3 sidebar">
             {% block sidebar %}{% endblock %}
