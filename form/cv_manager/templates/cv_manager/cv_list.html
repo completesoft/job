@@ -2,43 +2,15 @@
 {% load staticfiles %}
 
 {% block sidebar %}
-        <h4 class="sub-header">Фильтры:</h4>
+{% load bootstrap3 %}
+        <h3 class="sub-header"><strong>Фильтры:</strong></h3>
          <form action="{% url 'cv_manager:cv_list' %}" autocomplete="off">
 
-            <h5>Дата заполнения:</h5>
-              <div class="form-group">
-                <p>
-                <label for='{{filter.date_at.id_for_label}}'>{{filter.date_at.label}}:{{filter.date_at.errors}}</label>
-                  {{ filter.date_at }}
-                </p>
-                  <p>
-                <label for='{{filter.date_to.id_for_label}}'>{{filter.date_to.label}}:{{filter.date_to.errors}}</label>
-                  {{ filter.date_to }}
-                </p>
-              </div>
+            <h4>Дата заполнения:</h4>
+                {% bootstrap_form filter %}
 
               <div class="form-group">
-                <label for='{{filter.position.id_for_label}}'>{{filter.position.label}}:{{filter.position.errors}}</label>
-
-                  {{ filter.position }}
-
-              </div>
-              <div class="form-group">
-                <label for='{{filter.full_name.id_for_label}}'>{{filter.full_name.label}}:{{filter.full_name.errors}}</label>
-
-                    {{ filter.full_name }}
-
-              </div>
-              <div class="form-group">
-                <label for='{{filter.cv_state.id_for_label}}'>{{filter.cv_state.label}}:{{filter.cv_state.errors}}</label>
-
-                  {{ filter.cv_state }}
-
-              </div>
-              <div class="form-group">
-
                   <button type="submit" class="btn btn-primary">Показать</button>
-
               </div>
          </form>
 {% endblock %}
@@ -82,4 +54,8 @@
 
 
 {% block script_block %}
+
+<script type="text/javascript" src="{% static 'candidate/js/bootstrap-datetimepicker.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'candidate/js/bootstrap-datetimepicker.ru.js' %}"></script>
+<script src="{% static 'cv_manager/js/list.js' %}"></script>
 {% endblock %}

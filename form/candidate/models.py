@@ -4,8 +4,34 @@ from django.contrib.auth.models import User
 from django.dispatch import receiver
 
 
+
+class MailToAddress(models.Model):
+    full_name = models.CharField('Фамилия, имя, отчество', max_length=100, null=False, blank=False)
+    email_address = models.EmailField('Адрес электронной почты', null=False, blank=False)
+
+    class Meta():
+        verbose_name = 'Адресат'
+        verbose_name_plural = 'Адресаты'
+
+    def __str__(self):
+        return '{} {}'.format(self.full_name, self.email_address)
+
+
+class Location(models.Model):
+    loc_id = models.CharField('Идентификатор', max_length=20, null=False, blank=False)
+    describe = models.CharField('Наименование', max_length=100, null=True, blank=True, default='')
+    mail_to = models.ManyToManyField(MailToAddress, verbose_name='Получатели почты', related_name='locations')
+
+    class Meta():
+        verbose_name = 'АРМ анкетирования'
+        verbose_name_plural = 'АРМ анкетирования'
+
+    def __str__(self):
+        return '{} {}'.format(self.loc_id, self.describe)
+
+
 class Person(models.Model):
-    fill_location = models.ForeignKey('Location', verbose_name='Место заполнения', null=True, blank=True)
+    fill_location = models.ForeignKey(Location, verbose_name='Место заполнения', null=True, blank=True)
 
     fill_date = models.DateField('Дата заполнения',auto_now_add=True)
 
@@ -155,26 +181,6 @@ class MailBackSettings(models.Model):
         return 'EMAIL_HOST (сервер):{}, EMAIL_HOST_USER:{}'.format(self.email_host, self.email_host_user)
 
 
-class MailToAddress(models.Model):
-    full_name = models.CharField('Фамилия, имя, отчество', max_length=100, null=False, blank=False)
-    email_address = models.EmailField('Адрес электронной почты', null=False, blank=False)
-
-    class Meta():
-        verbose_name = 'Адресат'
-        verbose_name_plural = 'Адресаты'
-
-    def __str__(self):
-        return '{} {}'.format(self.full_name, self.email_address)
 
 
-class Location(models.Model):
-    loc_id = models.CharField('Идентификатор', max_length=20, null=False, blank=False)
-    describe = models.CharField('Наименование', max_length=100, null=True, blank=True, default='')
-    mail_to = models.ManyToManyField(MailToAddress, verbose_name='Получатели почты', related_name='locations')
 
-    class Meta():
-        verbose_name = 'АРМ анкетирования'
-        verbose_name_plural = 'АРМ анкетирования'
-
-    def __str__(self):
-        return '{} {}'.format(self.loc_id, self.describe)

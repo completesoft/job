@@ -40,8 +40,6 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 # Application definition
 INSTALLED_APPS = [
-    'candidate.apps.CandidateConfig',
-    'cv_manager.apps.CvManagerConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -49,6 +47,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'bootstrap3',
+    'candidate.apps.CandidateConfig',
+    'cv_manager.apps.CvManagerConfig',
 ]
 
 MIDDLEWARE = [
@@ -89,7 +89,7 @@ WSGI_APPLICATION = 'form.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'form',
+        'NAME': 'form2',
         'USER': 'admin',
         'PASSWORD': 'candidate',
         'HOST': 'localhost',

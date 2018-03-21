@@ -72,7 +72,7 @@
       <div class="well">
           <div class="row">
               <div class="col-md-6">
-                  <p><strong>Дата рождения:</strong> {{ person.born }}</p>
+                  <p><strong>Дата рождения:</strong> {{ person.birthday }}</p>
                   <p><strong>Пол:</strong> {{ person.get_gender_display }}</p>
                   <p><strong>Семейное положение:</strong> {{ person.civil_status }}</p>
                   <p><strong>Кол-во детей:</strong> {{ person.quant_children }}</p>
@@ -127,7 +127,7 @@
   <div id="education" class="tab-pane fade">
     <ul>
         {% for education in educations %}
-        <li class="main_li"><strong>{{ education.start_date }} - {{ education.end_date }}</strong>
+        <li class="main_li"><strong>{{ education.start_date|date:'F Y' }} - {{ education.end_date|date:'F Y' }}</strong>
             <ul class="no_marker">
                 <li>
                 <div class="well">
@@ -145,7 +145,7 @@
   <div id="experience" class="tab-pane fade">
     <ul>
         {% for experience in experiences %}
-        <li class="main_li"><h4>{{ experience.exp_start_date }} - {{ experience.exp_end_date }}</h4>
+        <li class="main_li"><h4>{{ experience.exp_start_date|date:'F Y' }} - {{ experience.exp_end_date|date:'F Y' }}</h4>
             <ul class="no_marker">
                 <li>
                     <div class="panel panel-default">
