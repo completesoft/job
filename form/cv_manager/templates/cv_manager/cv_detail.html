@@ -43,7 +43,24 @@
 		</div>
 {% endblock %}
 
+
+
+{% block sub_header %}
+<div class="row crumb">
+    <div class="container">
+        <ol class="breadcrumb breadcrumb-arrow">
+            <li><a href="{% url 'cv_manager:cv_list' %}">База резюме</a></li>
+            <li class="active"><span>Редактирование</span></li>
+        </ol>
+    </div>
+</div>
+{% endblock %}
+
+
+
+
 {% block table_main %}
+<div class="row main_panel">
     <h3>{{ person.full_name }}</h3>
 <ul class="nav nav-tabs">
   <li class="active"><a data-toggle="tab" href="#person">Основное</a></li>
@@ -218,4 +235,5 @@
       </div>
   </div>
 </div>
+    </div>
 {% endblock %}

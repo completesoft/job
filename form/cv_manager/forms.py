@@ -8,18 +8,15 @@ def get_cvstate_choices():
     cvstate_choices = []
     for num in CvStatusName.objects.all().order_by('status'):
         cvstate_choices.append((num.status, num.get_status_display()))
-    return []
+    return cvstate_choices
 
 class FilterCvListForm(forms.Form):
     date_at = forms.DateField(label='с', required=False, )
     date_to = forms.DateField(label='по', required=False)
-    position = forms.CharField(label='Должность', max_length=20, help_text='Чтобы показать всех оставте пустым',
-                               required=False)
+    position = forms.CharField(label='Должность', max_length=20, required=False)
     full_name = forms.CharField(label='ФИО', max_length=20, required=False)
     cv_state = forms.MultipleChoiceField(label='Статус', choices=get_cvstate_choices, required=False, widget=forms.widgets.CheckboxSelectMultiple())
-    # cv_state = forms.MultipleChoiceField(label='Статус', choices=[
-    #     (num.status, num.get_status_display()) for num in CvStatusName.objects.all().order_by('status')], required=False,
-    #                                      widget=forms.widgets.CheckboxSelectMultiple())
+
 
     def clean(self):
         cleaned_data = super().clean()
