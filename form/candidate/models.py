@@ -31,7 +31,7 @@ class Location(models.Model):
 
 
 class Person(models.Model):
-    fill_location = models.ForeignKey(Location, verbose_name='Место заполнения', null=True, blank=True)
+    fill_location = models.ForeignKey(Location, verbose_name='Место заполнения', null=True, blank=True, on_delete=models.SET_NULL)
 
     fill_date = models.DateField('Дата заполнения',auto_now_add=True)
 
