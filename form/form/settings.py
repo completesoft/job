@@ -49,6 +49,8 @@ INSTALLED_APPS = [
     'bootstrap3',
     'candidate.apps.CandidateConfig',
     'cv_manager.apps.CvManagerConfig',
+    'rest_framework',
+    'video_api.apps.VideoApiConfig',
 ]
 
 MIDDLEWARE = [
@@ -94,7 +96,7 @@ DATABASES = {
         'PASSWORD': 'candidate',
         'HOST': 'localhost',
         'PORT': '3306'
-    }
+    },
 }
 
 

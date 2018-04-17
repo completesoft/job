@@ -23,5 +23,6 @@ urlpatterns = [
     url(r'^form-(?P<loc_id>\d+)/', include('candidate.urls')),
     url(r'^admin/', admin.site.urls),
     url(r'^cvmanage/', include('cv_manager.urls')),
+    url(r'^video_api/', include('video_api.urls')),
 ]
 
